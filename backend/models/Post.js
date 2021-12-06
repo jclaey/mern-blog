@@ -1,6 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const CommentSchema = new Schema({
+  body: {
+    type: String,
+    required: true
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 const PostSchema = new Schema({
   title: {
     type: String,
@@ -10,10 +25,19 @@ const PostSchema = new Schema({
     type: String,
     required: true
   },
+  image: {
+    path: String,
+    filename: String
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  allowComments: {
+    type: Boolean,
+    default: true
+  },
+  comments: [CommentSchema],
   createdAt: {
     type: Date,
     default: Date.now
