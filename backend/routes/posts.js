@@ -2,12 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { asyncErrorHandler } = require('../middleware');
 const {
-  postIndex,
-  postShow
+  getPosts
 } = require('../controllers/posts');
 
-router.get('/', postIndex);
-
-router.get('/:id', postShow);
+router.get('/', asyncErrorHandler(getPosts));
 
 module.exports = router;

@@ -8,7 +8,7 @@ dotenv.config();
 
 connectDB();
 
-const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
 
 const app = express();
@@ -37,8 +37,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/posts', postsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/posts', postsRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

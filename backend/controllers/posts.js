@@ -1,10 +1,12 @@
-
+const Post = require('../models/Post');
+const User = require('../models/User');
 
 module.exports = {
-  postIndex(req, res, next) {
-    res.send('POST INDEX');
-  },
-  postShow(req, res, next) {
-    res.send('POST SHOW');
+  async getPosts(req, res, next) {
+    const posts = await Post.find({}).populate({
+      path: 'author',
+      model: 'User'
+    });
+    res.json(posts);
   }
 };

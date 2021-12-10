@@ -3,7 +3,7 @@ const router = express.Router();
 const { asyncErrorHandler } = require('../middleware');
 const {
   postLogin
-} = require('../controllers/index');
+} = require('../controllers/users');
 
 router.post('/login', postLogin);
 
