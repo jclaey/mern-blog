@@ -8,5 +8,18 @@ module.exports = {
       model: 'User'
     });
     res.json(posts);
+  },
+  async showPost(req, res, next) {
+    const post = await Post.findById(req.params.id).populate({
+      path: 'author',
+      model: 'User'
+    });
+
+    if (post) {
+      res.json(post);
+    } else {
+      res.status(404);
+      throw new Error('Post not found');
+    }
   }
 };

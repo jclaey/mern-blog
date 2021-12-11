@@ -16,7 +16,7 @@ const HomeScreen = () => {
 
   const renderedPosts = posts.map(post => {
     return (
-      <Post post={post} />
+      <Post post={post} key={post._id} />
     );
   });
 

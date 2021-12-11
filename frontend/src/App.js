@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomeScreen from './screens/HomeScreen';
+import PostScreen from './screens/PostScreen';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
@@ -8,11 +9,12 @@ const App = () => {
   return (
     <Router>
       <Header />
-      <div className="ui container">
+      <main className="ui container">
         <Routes>
-          <Route path='/' element={<HomeScreen />} exact />
+          <Route path="/" element={<HomeScreen />} exact />
+          <Route path="/post/:id" element={<PostScreen />} />
         </Routes>
-      </div>
+      </main>
       <Footer />
     </Router>
   );

@@ -12,6 +12,14 @@ code {
     monospace;
 }
 
+main {
+  min-height: 90vh;
+}
+
 #footer-copyright {
   text-align: center;
+}
+
+.segment .dimmer {
+  min-height: 80vh;
 }

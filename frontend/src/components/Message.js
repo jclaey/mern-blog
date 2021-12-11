@@ -7,9 +7,9 @@ const Message = ({ type, children }) => {
   };
 
   return (
-    <div class={`ui ${type} message`}>
-      <i onClick={() => onMessageDismiss()} class="close icon"></i>
-      <div class="header">
+    <div className={`ui ${type} message`}>
+      <i onClick={() => onMessageDismiss()} className="close icon"></i>
+      <div className="header">
         {children}
       </div>
     </div>
