@@ -1,10 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { asyncErrorHandler } = require('../middleware');
+const { asyncErrorHandler, isAuthorized } = require('../middleware');
 const {
-  postLogin
+  postRegister,
+  postLogin,
+  getProfile
 } = require('../controllers/users');
 
-router.post('/login', postLogin);
+router.post('/register', asyncErrorHandler(postRegister));
+
+router.post('/login', asyncErrorHandler(postLogin));
+
+router.get('/:id/profile', getProfile);
 
 module.exports = router;

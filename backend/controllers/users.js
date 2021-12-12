@@ -1,7 +1,40 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Post = require('../models/Post');
+const createToken = require('../utils/createToken');
 
 module.exports = {
+  async postRegister(req, res, next) {
+    const { name, email, password } = req.body;
+
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      res.status(400);
+      throw new Error('User already exists');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword
+    });
+
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: createToken(user._id)
+      });
+    } else {
+      res.status(400);
+      throw new Error('Invalid user data');
+    }
+  },
   async postLogin(req, res, next) {
     const { email, password } = req.body;
 
@@ -16,11 +49,29 @@ module.exports = {
         _id: user._id,
         name: user.name,
         email: user.email,
-        token: null
+        token: createToken(user._id)
       });
     } else {
       res.status(401);
       throw new Error('Invalid email or password');
+    }
+  },
+  async getProfile(req, res, next) {
+    const user = await User.findById(req.params.id);
+    const posts = await Post.find().where('author').equals(req.params.id).limit(5).exec();
+
+    // Somehow we need to compare the current user's user id with the profile owner's user id. We will conditionally show 'edit' and 'delete' buttons depending upon whether the two ids match. Additionally, we will protect the 'edit' and 'delete' routes with our isAuthorized middleware
+
+    if (user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        posts
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
     }
   }
 };
