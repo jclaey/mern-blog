@@ -1,0 +1,55 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
+import FormContainer from '../components/FormContainer';
+import { login } from '../actions/userActions';
+
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const userLogin = useSelector(state => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
+
+  const redirect = location.search ? location.search.split('=')[1] : '/';
+
+  useEffect(() => {
+    if(userInfo) {
+      navigate.push(redirect);
+    }
+  }, [navigate, userInfo, redirect]);
+
+  const submitHandler = e => {
+    e.preventDefault();
+    dispatch(login(email, password))
+  };
+
+  return (
+    <div className="ui grid">
+      <div className="ui row">
+        <div className='six wide centered column'>
+        <form class="ui form">
+          <div class="field">
+            <label>First Name</label>
+            <input type="email" name="email" placeholder="Email" />
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="password" name="password" placeholder="Password" />
+          </div>
+          <button class="ui button" type="submit">Sign In</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginScreen;

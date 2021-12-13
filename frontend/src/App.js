@@ -4,6 +4,7 @@ import HomeScreen from './screens/HomeScreen';
 import PostScreen from './screens/PostScreen';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import LoginScreen from './screens/LoginScreen';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomeScreen />} exact />
           <Route path="/post/:id" element={<PostScreen />} />
+          <Route path="/login" element={<LoginScreen />} />
         </Routes>
       </main>
       <Footer />
