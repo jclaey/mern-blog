@@ -35,3 +35,7 @@ main {
 #new-customer-register-link {
   margin-top: 1rem;
 }
+
+.compact.menu {
+  height: 40px;
+}
