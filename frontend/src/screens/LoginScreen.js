@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import FormContainer from '../components/FormContainer';
 import { login } from '../actions/userActions';
 
 const LoginScreen = () => {
@@ -15,39 +14,57 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userLogin = useSelector(state => state.userLogin);
-  const { loading, error, userInfo } = userLogin;
-
+  const { loading, error, userInfo } = useSelector(state => state.userLogin);
+  
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   useEffect(() => {
     if(userInfo) {
-      navigate.push(redirect);
+      navigate(redirect);
     }
   }, [navigate, userInfo, redirect]);
 
   const submitHandler = e => {
     e.preventDefault();
-    dispatch(login(email, password))
+    dispatch(login(email, password));
   };
 
   return (
-    <div className="ui grid">
-      <div className="ui row">
-        <div className='six wide centered column'>
-        <form class="ui form">
-          <div class="field">
-            <label>First Name</label>
-            <input type="email" name="email" placeholder="Email" />
+    <div>
+      {loading ? <Loader /> : error ? <Message type="warning">{error}</Message> :
+        <div className="ui grid">
+          <div className="ui row">
+            <div className='six wide centered column'>
+              <form className="ui form" onSubmit={submitHandler}>
+                <div className="field">
+                  <label>Email</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
+                </div>
+                <div className="field">
+                  <label>Password</label>
+                  <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                </div>
+                <button className="ui button" type="submit">Sign In</button>
+              </form>
+              <div id="new-customer-register-link">
+                New customer? <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label>Last Name</label>
-            <input type="password" name="password" placeholder="Password" />
-          </div>
-          <button class="ui button" type="submit">Sign In</button>
-        </form>
         </div>
-      </div>
+      }
     </div>
   );
 };

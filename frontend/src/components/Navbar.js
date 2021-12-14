@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <div className="ui secondary pointing menu">
+    <div className="ui secondary pointing menu" id="navbar">
       <Link to="/" className="item">
-        <span className="header-link">Home</span>
+        <span className="link item">Home</span>
       </Link>
       <div className="right menu">
         <Link to="/login" className="ui item">
-          <span className="header-link">Sign In</span>
+          <span className="link item">Sign In</span>
         </Link>
       </div>
     </div>

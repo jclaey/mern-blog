@@ -18,8 +18,20 @@ main {
 
 #footer-copyright {
   text-align: center;
+  font-size: 16px;
 }
 
 .segment .dimmer {
   min-height: 80vh;
+}
+
+#navbar {
+  min-height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5rem;
+}
+
+#new-customer-register-link {
+  margin-top: 1rem;
 }
