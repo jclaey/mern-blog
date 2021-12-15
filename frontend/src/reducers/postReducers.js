@@ -10,25 +10,25 @@ import {
 export const postListReducer = (state = { posts: [] }, action) => {
   switch (action.type) {
     case POST_LIST_REQUEST:
-      return { loading: true, posts: [] }
+      return { loading: true, posts: [] };
     case POST_LIST_SUCCESS:
-      return { loading: false, posts: action.payload }
+      return { loading: false, posts: action.payload };
     case POST_LIST_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default: 
-      return state
+      return state;
   }
 };
 
 export const postDetailsReducer = (state = { post: { author: {}, comments: [] } }, action) => {
   switch (action.type) {
     case POST_DETAILS_REQUEST:
-      return { loading: true, ...state }
+      return { loading: true, ...state };
     case POST_DETAILS_SUCCESS:
-      return { loading: false, post: action.payload }
+      return { loading: false, post: action.payload };
     case POST_DETAILS_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
 };

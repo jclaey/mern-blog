@@ -32,10 +32,14 @@ main {
   margin-bottom: 5rem;
 }
 
-#new-customer-register-link {
+.bottom-form-link {
   margin-top: 1rem;
 }
 
 .compact.menu {
   height: 40px;
+}
+
+#site-footer {
+  margin-top: 3rem;
 }

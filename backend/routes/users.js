@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { asyncErrorHandler, isAuthorized } = require('../middleware');
+const asyncHandler = require('express-async-handler');
+const { isAuthorized } = require('../middleware');
 const {
   postRegister,
   postLogin,
   getProfile
 } = require('../controllers/users');
 
-router.post('/register', asyncErrorHandler(postRegister));
+router.post('/register', asyncHandler(postRegister));
 
-router.post('/login', asyncErrorHandler(postLogin));
+router.post('/login', asyncHandler(postLogin));
 
 router.get('/:id/profile', getProfile);
 

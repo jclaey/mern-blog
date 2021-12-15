@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { asyncErrorHandler } = require('../middleware');
+const asyncHandler = require('express-async-handler');
 const {
   getPosts,
   showPost
 } = require('../controllers/posts');
 
-router.get('/', asyncErrorHandler(getPosts));
+router.get('/', asyncHandler(getPosts));
 
-router.get('/:id', asyncErrorHandler(showPost));
+router.get('/:id', asyncHandler(showPost));
 
 module.exports = router;

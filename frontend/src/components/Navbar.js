@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <div className="ui secondary pointing menu" id="navbar">
       <Link to="/" className="item">
-        <span className="link item">Home</span>
+        <span className="link item">Log 'n' Blog</span>
       </Link>
         {userInfo ? 
           <div className="right menu">
@@ -31,6 +31,9 @@ const Header = () => {
           <div className="right menu">
             <Link to="/login" className="ui item">
               <span className="link item">Sign In</span>
+            </Link>
+            <Link to="/register" className="ui item">
+              <span className="link item">Create Account</span>
             </Link>
           </div>
         }

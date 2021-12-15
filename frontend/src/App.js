@@ -5,6 +5,7 @@ import PostScreen from './screens/PostScreen';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<HomeScreen />} exact />
           <Route path="/post/:id" element={<PostScreen />} />
           <Route path="/login" element={<LoginScreen />} />
+          <Route path="/register" element={<RegisterScreen />} />
         </Routes>
       </main>
       <Footer />
