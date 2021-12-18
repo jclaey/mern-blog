@@ -75,8 +75,27 @@ module.exports = {
     }
   },
   async updateProfile(req, res, next) {
-    // const { name, email } = req.body;
-    // await User.findByIdAndUpdate(req.params.id, {});
-    res.send('update');
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      if (req.body.password) {
+        // pre-save middleware in user model will automatically salt and hash password before save
+        user.password = req.body.password;
+      }
+  
+      const updateUser = await user.save();
+  
+      res.json({
+        _id: updateUser._id,
+        name: updateUser.name,
+        email: updateUser.email,
+        token: generateToken(updateUser._id)
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
+    }
   }
 };
