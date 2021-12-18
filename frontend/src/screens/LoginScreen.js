@@ -60,7 +60,7 @@ const LoginScreen = () => {
                 </div>
                 <button className="ui button" type="submit">Sign In</button>
               </form>
-              <div id="new-customer-register-link">
+              <div className="bottom-form-link">
                 Not yet a member? <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
               </div>
             </div>

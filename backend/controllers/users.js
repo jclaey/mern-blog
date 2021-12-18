@@ -73,5 +73,10 @@ module.exports = {
       res.status(404);
       throw new Error('User not found');
     }
+  },
+  async updateProfile(req, res, next) {
+    // const { name, email } = req.body;
+    // await User.findByIdAndUpdate(req.params.id, {});
+    res.send('update');
   }
 };

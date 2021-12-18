@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 const Post = ({ post }) => {
   return (
     <div className="item" key={post._id}>
-      <i className="large middle aligned icon user"></i>
       <div className="content">
         <div className="description">
           <Link to={`/post/${post._id}`}>

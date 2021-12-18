@@ -5,13 +5,16 @@ const { isAuthorized } = require('../middleware');
 const {
   postRegister,
   postLogin,
-  getProfile
+  getProfile,
+  updateProfile
 } = require('../controllers/users');
 
 router.post('/register', asyncHandler(postRegister));
 
 router.post('/login', asyncHandler(postLogin));
 
-router.get('/:id/profile', getProfile);
+router.get('/:id/profile', isAuthorized, getProfile);
+
+router.put('/:id/profile/edit', isAuthorized, updateProfile);
 
 module.exports = router;

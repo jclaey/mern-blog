@@ -35,8 +35,6 @@ export const listPostDetails = id => async dispatch => {
 
     const { data } = await axios.get(`/api/posts/${id}`);
 
-    console.log(data.author.name);
-
     dispatch({
       type: POST_DETAILS_SUCCESS,
       payload: data
