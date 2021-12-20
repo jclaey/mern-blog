@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
-import { postListReducer, postDetailsReducer } from './postReducers';
-import { userLoginReducer, userRegisterReducer, userDetailsReducer } from './userReducers';
+import { postListReducer, postDetailsReducer, postCreateReducer } from './postReducers';
+import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateReducer } from './userReducers';
 
 export default combineReducers({
   postList: postListReducer,
   postDetails: postDetailsReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
-  userDetails: userDetailsReducer
+  userDetails: userDetailsReducer,
+  userUpdate: userUpdateReducer,
+  postCreate: postCreateReducer
 });

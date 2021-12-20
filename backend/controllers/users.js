@@ -91,7 +91,7 @@ module.exports = {
         _id: updateUser._id,
         name: updateUser.name,
         email: updateUser.email,
-        token: generateToken(updateUser._id)
+        token: createToken(updateUser._id)
       });
     } else {
       res.status(404);

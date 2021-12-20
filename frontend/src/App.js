@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
+import NewPostScreen from './screens/NewPostScreen';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/register" element={<RegisterScreen />} />
           <Route path="/:id/profile" element={<ProfileScreen />} />
           <Route path="/:id/profile/edit" element={<EditProfileScreen />} />
+          <Route path="/post/new" element={<NewPostScreen />} />
         </Routes>
       </main>
       <Footer />

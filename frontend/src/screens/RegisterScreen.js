@@ -27,7 +27,7 @@ const LoginScreen = () => {
     }
   }, [navigate, userInfo, redirect]);
 
-  const submitHandler = e => {
+  const onFormSubmit = e => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -46,7 +46,7 @@ const LoginScreen = () => {
         <div className="ui grid">
           <div className="ui row">
             <div className='six wide centered column'>
-              <form className="ui form" onSubmit={submitHandler}>
+              <form className="ui form" onSubmit={onFormSubmit}>
                 <div className="field">
                   <label>Name</label>
                   <input 

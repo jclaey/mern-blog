@@ -21,9 +21,18 @@ const PostScreen = () => {
         <div>
           <h1 className="ui header">{post.title}</h1>
           <p>By: {post.author.name}</p>
-          <div>
+          <div className='post-body'>
             {post.content}
           </div>
+          <div id="comments-area"></div>
+          <form className="ui reply form">
+            <div className="field">
+              <textarea></textarea>
+            </div>
+            <div className="ui blue labeled submit icon button">
+              <i className="icon edit"></i> Add Comment
+            </div>
+          </form>
         </div>
       }
     </div>

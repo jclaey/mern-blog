@@ -64,6 +64,7 @@ const EditProfileScreen = () => {
                   <label>Name</label>
                   <input 
                     type="text"
+                    name="name"
                     placeholder="Enter name"
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -73,6 +74,7 @@ const EditProfileScreen = () => {
                   <label>Email</label>
                   <input 
                     type="email"
+                    name="email"
                     placeholder="Enter email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -82,6 +84,7 @@ const EditProfileScreen = () => {
                   <label>Password</label>
                   <input 
                     type="password"
+                    name="password"
                     placeholder="Enter password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
