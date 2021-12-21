@@ -34,7 +34,7 @@ const EditProfileScreen = () => {
     }
   }, [navigate, userInfo, user, id, dispatch]);
 
-  const submitHandler = e => {
+  const onFormSubmit = e => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -59,7 +59,7 @@ const EditProfileScreen = () => {
         <div className="ui grid">
           <div className="ui row">
             <div className='six wide centered column'>
-              <form className="ui form" onSubmit={submitHandler}>
+              <form className="ui form" onSubmit={onFormSubmit}>
                 <div className="field">
                   <label>Name</label>
                   <input 

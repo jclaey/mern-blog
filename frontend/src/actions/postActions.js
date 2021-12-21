@@ -9,7 +9,10 @@ import {
   POST_DETAILS_FAIL,
   POST_CREATE_REQUEST,
   POST_CREATE_SUCCESS,
-  POST_CREATE_FAIL
+  POST_CREATE_FAIL,
+  POST_CREATE_COMMENT_REQUEST,
+  POST_CREATE_COMMENT_SUCCESS,
+  POST_CREATE_COMMENT_FAIL
 } from '../constants/postConstants';
 
 export const listPosts = () => async dispatch => {
@@ -71,6 +74,32 @@ export const createPost = (title, content, author) => async dispatch => {
   } catch (error) {
     dispatch({
       type: POST_CREATE_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+export const createComment = (id, body) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_CREATE_COMMENT_REQUEST });
+
+    const { userLogin: { userInfo } } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
+    await axios.post(`/api/posts/${id}/comments`, { body }, config);
+
+    dispatch({ type: POST_CREATE_COMMENT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: POST_CREATE_COMMENT_FAIL,
       payload: error.response && error.response.data.message
         ? error.response.data.message
         : error.message

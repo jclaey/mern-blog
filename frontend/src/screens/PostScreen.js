@@ -1,19 +1,61 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { listPostDetails } from '../actions/postActions';
+import { listPostDetails, createComment } from '../actions/postActions';
+import { POST_CREATE_COMMENT_RESET } from '../constants/postConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const PostScreen = () => {
+  const [body, setBody] = useState('');
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const { loading, error, post } = useSelector(state => state.postDetails);
+  const { userInfo } = useSelector(state => state.userLogin);
+  const { 
+    error: errorCommentCreate,
+    success: successCommentCreate
+  } = useSelector(state => state.postCommentCreate);
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    console.log(typeof id);
+    dispatch(createComment(id, body));
+  }
 
   useEffect(() => {
+    if (successCommentCreate) {
+      setBody('');
+      dispatch({ type: POST_CREATE_COMMENT_RESET });
+    }
+    console.log(typeof id);
     dispatch(listPostDetails(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, successCommentCreate]);
+
+  const renderComments = () => {
+    if (post.comments.length === 0) {
+      return <p>No comments</p>
+    }
+
+    return post.comments.map(comment => {
+      return (
+        <div className="comment">
+          <div className="content">
+            <Link to="/" className="author">
+              {comment.name}
+            </Link>
+            <div className="metadata">
+              <span className="date">{comment.date.slice(0, 10)}</span>
+            </div>
+            <div className="text">
+              {comment.body}
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
 
   return (
     <div>
@@ -24,15 +66,25 @@ const PostScreen = () => {
           <div className='post-body'>
             {post.content}
           </div>
-          <div id="comments-area"></div>
-          <form className="ui reply form">
-            <div className="field">
-              <textarea></textarea>
-            </div>
-            <div className="ui blue labeled submit icon button">
-              <i className="icon edit"></i> Add Comment
-            </div>
-          </form>
+          <div id="comments-area" className="ui comments">
+            <h3 className="ui dividing header">Comments</h3>
+            {renderComments()}
+          </div>
+          <h2>Post A Comment</h2>
+          {errorCommentCreate && <Message type="warning">{errorCommentCreate}</Message>}
+          {userInfo ? 
+            <form className="ui reply form" onSubmit={onFormSubmit}>
+              <div className="field">
+                <textarea
+                  name="body"
+                  placeholder="Enter comment..."
+                  value={body}
+                  onChange={e => setBody(e.target.value)}
+                ></textarea>
+              </div>
+              <button className="ui button" type="submit">Add Comment</button>
+            </form> : <p>You must <Link to="/login">sign in</Link> to post a comment</p>
+          }
         </div>
       }
     </div>

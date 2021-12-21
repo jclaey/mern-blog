@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const express = require('express');
+const morgan = require('morgan');
 const { notFound, errorHandler } = require('./middleware');
 const connectDB = require('./config/db');
 
@@ -14,6 +15,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.use('/api/users', usersRouter);
 app.use('/api/posts', postsRouter);

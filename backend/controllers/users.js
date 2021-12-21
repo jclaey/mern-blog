@@ -60,8 +60,6 @@ module.exports = {
     const user = await User.findById(req.params.id);
     const posts = await Post.find().where('author').equals(req.params.id).limit(5).exec();
 
-    // Somehow we need to compare the current user's user id with the profile owner's user id. We will conditionally show 'edit' and 'delete' buttons depending upon whether the two ids match. Additionally, we will protect the 'edit' and 'delete' routes with our isAuthorized middleware
-
     if (user) {
       res.json({
         _id: user._id,
@@ -81,8 +79,8 @@ module.exports = {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       if (req.body.password) {
-        // pre-save middleware in user model will automatically salt and hash password before save
-        user.password = req.body.password;
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(req.body.password, salt);
       }
   
       const updateUser = await user.save();

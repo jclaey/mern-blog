@@ -42,5 +42,42 @@ module.exports = {
       res.status(500);
       throw new Error('Server error');
     }
+  },
+  async commentCreate(req, res, next) {
+    const { body } = req.body;
+
+    const post = await Post.findById(req.params.id).populate({
+      path: 'comments',
+      populate: {
+        path: 'author',
+        model: 'User'
+      }
+    }).exec();
+
+    console.log('Hello there!');
+
+    if (post) {
+      const currentUserComment = post.comments.filter(comment => comment.author.equals(req.user._id));
+
+      if (currentUserComment.length) {
+        res.status(400);
+        throw new Error('You have already commented on this post');
+      } 
+
+      const user = await User.findById(req.user._id);
+
+      post.comments.push({
+        name: user.name,
+        body,
+        author: req.user._id
+      });
+
+      post.save();
+
+      res.status(201).json({ message: 'Comment created' });
+    } else {
+      res.status(404);
+      throw new Error('Post not found');
+    }
   }
 };
