@@ -12,7 +12,10 @@ import {
   POST_CREATE_COMMENT_REQUEST,
   POST_CREATE_COMMENT_SUCCESS,
   POST_CREATE_COMMENT_FAIL,
-  POST_CREATE_COMMENT_RESET
+  POST_CREATE_COMMENT_RESET,
+  POST_UPDATE_REQUEST,
+  POST_UPDATE_SUCCESS,
+  POST_UPDATE_FAIL
 } from '../constants/postConstants';
 
 export const postListReducer = (state = { posts: [] }, action) => {
@@ -68,5 +71,18 @@ export const postCommentCreateReducer = (state = {}, action) => {
       return {};
     default:
       return state;
+  }
+};
+
+export const postUpdateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_UPDATE_REQUEST:
+      return { loading: true }
+    case POST_UPDATE_SUCCESS:
+      return { loading: false, success: true }
+    case POST_UPDATE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
   }
 };

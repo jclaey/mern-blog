@@ -49,5 +49,9 @@ h1 {
 }
 
 .post-body {
+  margin-bottom: 2rem;
+}
+
+.post-container {
   margin-bottom: 5rem;
 }

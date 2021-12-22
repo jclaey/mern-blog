@@ -54,8 +54,6 @@ module.exports = {
       }
     }).exec();
 
-    console.log('Hello there!');
-
     if (post) {
       const currentUserComment = post.comments.filter(comment => comment.author.equals(req.user._id));
 
@@ -75,6 +73,23 @@ module.exports = {
       post.save();
 
       res.status(201).json({ message: 'Comment created' });
+    } else {
+      res.status(404);
+      throw new Error('Post not found');
+    }
+  },
+  async postUpdate(req, res, next) {
+    const { title, content } = req.body;
+
+    const post = await Post.findById(req.params.id);
+
+    if (post) {
+      post.title = title || post.title;
+      post.content = content || post.content;
+
+      await post.save();
+
+      res.status(201).json({ message: 'Post updated' });
     } else {
       res.status(404);
       throw new Error('Post not found');

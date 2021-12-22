@@ -8,6 +8,8 @@ import Message from '../components/Message';
 
 const PostScreen = () => {
   const [body, setBody] = useState('');
+  const [isPostOwner, setIsPostOwner] = useState(false);
+
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -20,7 +22,6 @@ const PostScreen = () => {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    console.log(typeof id);
     dispatch(createComment(id, body));
   }
 
@@ -29,9 +30,16 @@ const PostScreen = () => {
       setBody('');
       dispatch({ type: POST_CREATE_COMMENT_RESET });
     }
-    console.log(typeof id);
     dispatch(listPostDetails(id));
   }, [dispatch, id, successCommentCreate]);
+
+  useEffect(() => {
+    if (userInfo && userInfo._id === post.author._id) {
+      setIsPostOwner(true);
+    } else {
+      setIsPostOwner(false);
+    }
+  }, [post, userInfo]);
 
   const renderComments = () => {
     if (post.comments.length === 0) {
@@ -42,7 +50,7 @@ const PostScreen = () => {
       return (
         <div className="comment">
           <div className="content">
-            <Link to="/" className="author">
+            <Link to={`/${comment.author}/profile`} className="author">
               {comment.name}
             </Link>
             <div className="metadata">
@@ -61,10 +69,19 @@ const PostScreen = () => {
     <div>
       {loading ? <Loader /> : error ? <Message type="warning">{error}</Message> : 
         <div>
-          <h1 className="ui header">{post.title}</h1>
-          <p>By: {post.author.name}</p>
-          <div className='post-body'>
-            {post.content}
+          <div className="post-container">
+            <h1 className="ui header">{post.title}</h1>
+            <p>By: {post.author.name}</p>
+            <div className='post-body'>
+              {post.content}
+            </div>
+            {isPostOwner && 
+              <Link to={`/post/${post._id}/edit`}>
+                <div>
+                  <button className="ui button">Edit Post</button>
+                </div>
+              </Link>
+            }
           </div>
           <div id="comments-area" className="ui comments">
             <h3 className="ui dividing header">Comments</h3>

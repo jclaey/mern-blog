@@ -9,6 +9,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import NewPostScreen from './screens/NewPostScreen';
+import EditPostScreen from './screens/EditPostScreen';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomeScreen />} exact />
           <Route path="/post/:id" element={<PostScreen />} />
+          <Route path="/post/:id/edit" element={<EditPostScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
           <Route path="/:id/profile" element={<ProfileScreen />} />

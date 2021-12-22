@@ -99,7 +99,7 @@ const EditProfileScreen = () => {
                     onChange={e => setConfirmPassword(e.target.value)}
                   />
                 </div>
-                <button className="ui button" type="submit">Save</button>
+                <button className="ui button" type="submit">Save Changes</button>
               </form>
             </div>
           </div>
