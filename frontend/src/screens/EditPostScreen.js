@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails } from '../actions/userActions';
-import { updatePost } from '../actions/postActions';
+import { updatePost, listPostDetails } from '../actions/postActions';
 
 const EditPostScreen = () => {
   const [title, setTitle] = useState('');
@@ -23,7 +23,7 @@ const EditPostScreen = () => {
       navigate('/login');
     } else {
       if (!post.title) {
-        dispatch(getUserDetails(id));
+        dispatch(listPostDetails(id));
       } else {
         setTitle(post.title);
         setContent(post.content);
