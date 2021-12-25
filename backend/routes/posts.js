@@ -7,7 +7,8 @@ const {
   postShow,
   postNew,
   commentCreate,
-  postUpdate
+  postUpdate,
+  commentUpdate
 } = require('../controllers/posts');
 
 router.get('/', asyncHandler(getPosts));
@@ -15,6 +16,8 @@ router.get('/', asyncHandler(getPosts));
 router.get('/:id', asyncHandler(postShow));
 
 router.post('/:id/comments', isAuthorized, asyncHandler(commentCreate));
+
+router.put('/:id/comments/:comment_id/edit', isAuthorized, asyncHandler(commentUpdate));
 
 router.put('/:id/edit', isAuthorized, asyncHandler(postUpdate));
 

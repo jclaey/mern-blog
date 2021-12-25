@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { postListReducer, postDetailsReducer, postCreateReducer, postCommentCreateReducer, postUpdateReducer } from './postReducers';
+import { postListReducer, postDetailsReducer, postCreateReducer, postCommentCreateReducer, postUpdateReducer, postCommentUpdateReducer } from './postReducers';
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateReducer } from './userReducers';
 
 export default combineReducers({
@@ -11,5 +11,6 @@ export default combineReducers({
   userUpdate: userUpdateReducer,
   postCreate: postCreateReducer,
   postCommentCreate: postCommentCreateReducer,
-  postUpdate: postUpdateReducer
+  postUpdate: postUpdateReducer,
+  postCommentUpdate: postCommentUpdateReducer
 });
