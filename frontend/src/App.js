@@ -10,6 +10,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import EditProfileScreen from './screens/EditProfileScreen';
 import NewPostScreen from './screens/NewPostScreen';
 import EditPostScreen from './screens/EditPostScreen';
+import EditorScreen from './screens/EditorScreen';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/:id/profile" element={<ProfileScreen />} />
           <Route path="/:id/profile/edit" element={<EditProfileScreen />} />
           <Route path="/post/new" element={<NewPostScreen />} />
+          <Route path="/editor" element={<EditorScreen />} />
         </Routes>
       </main>
       <Footer />

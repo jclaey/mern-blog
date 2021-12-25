@@ -34,7 +34,7 @@ const ProfileScreen = () => {
             <Link to={`/post/${post._id}`}>
               <h3>{post.title}</h3>
             </Link>
-            <div>{post.content.slice(0, 250)}...</div>
+            <p>Posted on: {post.createdAt.slice(0,10)}</p>
           </div>
         </div>
       </div>
@@ -43,16 +43,19 @@ const ProfileScreen = () => {
 
   return (
     <div>
-      {error && <Message variant="danger">{error}</Message>}
-      {loading && <Loader />}
-      <h1>{isOwner ? 'My' : `${user.name}'s`} Profile</h1>
-      <p>Email: {user.email}</p>
-      {isOwner ? 
-        <Link to={`/${id}/profile/edit`}>
-          <button className="ui button">Edit Info</button> 
-        </Link>
-        : ''}
+      <div id="profile-user-info">
+        {error && <Message variant="danger">{error}</Message>}
+        {loading && <Loader />}
+        <h1>{isOwner ? 'My' : `${user.name}'s`} Profile</h1>
+        <p>Email: {user.email}</p>
+        {isOwner ? 
+          <Link to={`/${id}/profile/edit`}>
+            <button className="ui button">Edit Info</button> 
+          </Link>
+          : ''}
+      </div>
       <div className='ui relaxed divided list' id="profile-posts">
+        <h2>Recent Posts</h2>
         {renderedPosts}
       </div>
     </div>

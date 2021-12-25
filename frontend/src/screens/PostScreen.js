@@ -72,9 +72,7 @@ const PostScreen = () => {
           <div className="post-container">
             <h1 className="ui header">{post.title}</h1>
             <p>By: {post.author.name}</p>
-            <div className='post-body'>
-              {post.content}
-            </div>
+            <div className='post-body' dangerouslySetInnerHTML={{ __html: post.content }}></div>
             {isPostOwner && 
               <Link to={`/post/${post._id}/edit`}>
                 <div>

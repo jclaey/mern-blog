@@ -1,13 +1,15 @@
+/* eslint-disable no-multi-str */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Editor } from '@tinymce/tinymce-react';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { createPost } from '../actions/postActions';
 
 const NewPostScreen = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  let content;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,6 +22,10 @@ const NewPostScreen = () => {
       navigate('/login');
     }
   }, [userInfo, navigate]);
+
+  const onEditorChange = (e) => {
+    content = e.target.getContent();
+  }
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -46,12 +52,25 @@ const NewPostScreen = () => {
           </div>
           <div className="field">
             <label>Post Content</label>
-            <textarea 
-              name="content"
-              value={content}
-              onChange={e => setContent(e.target.value)}
-              placeholder="Write your blog post here..."
-            ></textarea>
+            <Editor
+              apiKey='u7jtsuz1glcmvd4obg3mihkfv74kpuhtx7qhydm5uc9j6u7e'
+              onChange={onEditorChange}
+              initialValue="<p>Initial content</p>"
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image',
+                  'charmap print preview anchor help',
+                  'searchreplace visualblocks code',
+                  'insertdatetime media table paste wordcount'
+                ],
+                toolbar:
+                  'undo redo | formatselect | bold italic | \
+                  alignleft aligncenter alignright | \
+                  bullist numlist outdent indent | help'
+              }}
+            />
           </div>
           <button className="ui button" type="submit">Create</button>
         </form>

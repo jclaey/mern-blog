@@ -9,10 +9,8 @@ const Post = ({ post }) => {
           <Link to={`/post/${post._id}`}>
             <h2>{post.title}</h2>
           </Link>
+          <p>Posted on: {post.createdAt.slice(0, 10)}</p>
           <p>By: {post.author.name}</p>
-          <div>
-            {post.content.slice(0, 250)}...
-          </div>
         </div>
       </div>
     </div>
