@@ -99,7 +99,7 @@ module.exports = {
     const { body } = req.body;
 
     const post = await Post.findById(req.params.id);
-    const comment = post.comments.find(comment => comment.author === req.user._id);
+    const comment = post.comments.find(comment => String(comment.author) === String(req.user._id));
 
     if (comment) {
       comment.body = body || comment.body;

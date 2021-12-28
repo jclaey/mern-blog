@@ -155,12 +155,9 @@ export const updatePostComment = (id, commentId, body) => async (dispatch, getSt
       }
     };
 
-    const { data } = await axios.put(`/api/posts/${id}/comments/${commentId}/edit`, body, config);
+    await axios.put(`/api/posts/${id}/comments/${commentId}/edit`, { body }, config);
 
-    dispatch({
-      type: POST_UPDATE_COMMENT_SUCCESS,
-      payload: data
-    });
+    dispatch({ type: POST_UPDATE_COMMENT_SUCCESS });
   } catch (error) {
     dispatch({
       type: POST_UPDATE_COMMENT_FAIL,

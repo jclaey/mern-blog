@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { listPostDetails, createComment } from '../actions/postActions';
+import { listPostDetails, createComment, updatePostComment } from '../actions/postActions';
 import { POST_CREATE_COMMENT_RESET } from '../constants/postConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const PostScreen = () => {
   const [body, setBody] = useState('');
+  const [editCommentBody, setEditCommentBody] = useState('');
   const [isPostOwner, setIsPostOwner] = useState(false);
 
   const { id } = useParams();
@@ -23,7 +24,16 @@ const PostScreen = () => {
   const onFormSubmit = e => {
     e.preventDefault();
     dispatch(createComment(id, body));
-  }
+  };
+
+  const onEditClick = e => {
+    document.querySelector('#edit-comment-form').style.display = 'block';
+  };
+
+  const onCommentEditFormSubmit = (e, postId, commentId, commentBody) => {
+    e.preventDefault();
+    dispatch(updatePostComment(postId, commentId, commentBody));
+  };
 
   useEffect(() => {
     if (successCommentCreate) {
@@ -48,7 +58,7 @@ const PostScreen = () => {
 
     return post.comments.map(comment => {
       return (
-        <div className="comment">
+        <div className="comment" key={comment._id}>
           <div className="content">
             <Link to={`/${comment.author}/profile`} className="author">
               {comment.name}
@@ -58,6 +68,26 @@ const PostScreen = () => {
             </div>
             <div className="text">
               {comment.body}
+              {userInfo && userInfo._id === comment.author 
+                ? <span 
+                    style={{cursor: 'pointer', display: 'block', marginTop: '1rem'}}
+                    onClick={onEditClick}
+                  >
+                    <strong>Edit Comment</strong>
+                  </span>
+                : ''}
+            </div>
+            <div id="edit-comment-form" style={{display: 'none'}}>
+              <form className="ui reply form" onSubmit={e => onCommentEditFormSubmit(e, id, comment._id, editCommentBody)}>
+                <div className="field">
+                  <textarea
+                    name="body"
+                    value={editCommentBody}
+                    onChange={e => setEditCommentBody(e.target.value)}
+                  ></textarea>
+                </div>
+                <button className="ui button" type="submit">Update</button>
+              </form>
             </div>
           </div>
         </div>
