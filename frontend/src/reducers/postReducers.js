@@ -95,7 +95,7 @@ export const postCommentUpdateReducer = (state = {}, action) => {
     case POST_UPDATE_COMMENT_REQUEST:
       return { loading: true }
     case POST_UPDATE_COMMENT_SUCCESS:
-      return { loading: false, success: true }
+      return { loading: false, success: true, updatedComment: action.payload }
     case POST_UPDATE_COMMENT_FAIL:
       return { loading: false, error: action.payload }
     default:

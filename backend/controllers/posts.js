@@ -106,7 +106,12 @@ module.exports = {
 
       post.save();
 
-      res.status(201).json({ message: 'Comment updated' });
+      res.status(201).json({
+        name: comment.name,
+        body: comment.body,
+        author: comment.author,
+        date: comment.date
+      });
     } else {
       res.status(404);
       throw new Error('Comment not found');

@@ -9,6 +9,8 @@ import Message from '../components/Message';
 const PostScreen = () => {
   const [body, setBody] = useState('');
   const [editCommentBody, setEditCommentBody] = useState('');
+  const [hasUpdatedComment, setHasUpdatedComment] = useState(false);
+  const [hasCommented, setHasCommented] = useState(false);
   const [isPostOwner, setIsPostOwner] = useState(false);
 
   const { id } = useParams();
@@ -20,19 +22,29 @@ const PostScreen = () => {
     error: errorCommentCreate,
     success: successCommentCreate
   } = useSelector(state => state.postCommentCreate);
+  const {
+    error: errorCommentUpdate,
+    success: successCommentUpdate,
+    updatedComment
+  } = useSelector(state => state.postCommentUpdate);
 
   const onFormSubmit = e => {
     e.preventDefault();
     dispatch(createComment(id, body));
   };
 
+  const editCommentForm = document.querySelector('#edit-comment-form');
+
   const onEditClick = e => {
-    document.querySelector('#edit-comment-form').style.display = 'block';
+    editCommentForm.style.display = 'block';
   };
 
   const onCommentEditFormSubmit = (e, postId, commentId, commentBody) => {
     e.preventDefault();
     dispatch(updatePostComment(postId, commentId, commentBody));
+    if (hasUpdatedComment) {
+      setHasUpdatedComment(false);
+    }
   };
 
   useEffect(() => {
@@ -40,6 +52,7 @@ const PostScreen = () => {
       setBody('');
       dispatch({ type: POST_CREATE_COMMENT_RESET });
     }
+
     dispatch(listPostDetails(id));
   }, [dispatch, id, successCommentCreate]);
 
@@ -49,7 +62,19 @@ const PostScreen = () => {
     } else {
       setIsPostOwner(false);
     }
+
+    if (userInfo && post.comments.find(comment => comment.author === userInfo._id)) {
+      setHasCommented(true);
+    } else {
+      setHasCommented(false);
+    }
   }, [post, userInfo]);
+
+  useEffect(() => {
+    if (updatedComment) {
+      setHasUpdatedComment(true);
+    }
+  }, [updatedComment]);
 
   const renderComments = () => {
     if (post.comments.length === 0) {
@@ -78,6 +103,8 @@ const PostScreen = () => {
                 : ''}
             </div>
             <div id="edit-comment-form" style={{display: 'none'}}>
+              {errorCommentUpdate && <Message type="warning">{errorCommentUpdate}</Message>}
+              {successCommentUpdate && <Message type="success">Comment updated</Message>}
               <form className="ui reply form" onSubmit={e => onCommentEditFormSubmit(e, id, comment._id, editCommentBody)}>
                 <div className="field">
                   <textarea
@@ -113,11 +140,48 @@ const PostScreen = () => {
           </div>
           <div id="comments-area" className="ui comments">
             <h3 className="ui dividing header">Comments</h3>
-            {renderComments()}
+            <div id="rendered-comments">
+              {hasUpdatedComment ? 
+                <div className="comment" key={updatedComment._id}>
+                  <div className="content">
+                    <Link to={`/${updatedComment.author}/profile`} className="author">
+                      {updatedComment.name}
+                    </Link>
+                    <div className="metadata">
+                      <span className="date">{updatedComment.date.slice(0, 10)}</span>
+                    </div>
+                    <div className="text">
+                      {updatedComment.body}
+                      {userInfo && userInfo._id === updatedComment.author 
+                        ? <span 
+                            style={{cursor: 'pointer', display: 'block', marginTop: '1rem'}}
+                            onClick={onEditClick}
+                          >
+                            <strong>Edit Comment</strong>
+                          </span>
+                        : ''}
+                    </div>
+                    <div id="edit-comment-form" style={{display: 'none'}}>
+                      {errorCommentUpdate && <Message type="warning">{errorCommentUpdate}</Message>}
+                      <form className="ui reply form" onSubmit={e => onCommentEditFormSubmit(e, id, updatedComment._id, editCommentBody)}>
+                        <div className="field">
+                          <textarea
+                            name="body"
+                            value={editCommentBody}
+                            onChange={e => setEditCommentBody(e.target.value)}
+                          ></textarea>
+                        </div>
+                        <button className="ui button" type="submit">Update</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              : renderComments()}
+            </div>
           </div>
           <h2>Post A Comment</h2>
           {errorCommentCreate && <Message type="warning">{errorCommentCreate}</Message>}
-          {userInfo ? 
+          {userInfo && !hasCommented ? 
             <form className="ui reply form" onSubmit={onFormSubmit}>
               <div className="field">
                 <textarea
@@ -128,7 +192,7 @@ const PostScreen = () => {
                 ></textarea>
               </div>
               <button className="ui button" type="submit">Add Comment</button>
-            </form> : <p>You must <Link to="/login">sign in</Link> to post a comment</p>
+            </form> : userInfo && hasCommented ? <p>You have already commented on this post</p> : <p>You must <Link to="/login">sign in</Link> to post a comment</p>
           }
         </div>
       }
