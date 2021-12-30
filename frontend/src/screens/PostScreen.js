@@ -127,6 +127,7 @@ const PostScreen = () => {
       {loading ? <Loader /> : error ? <Message type="warning">{error}</Message> : 
         <div>
           <div className="post-container">
+            {post.image && <img className='ui fluid image' src={post.image.path} alt={`${post.title} showcase`} />}
             <h1 className="ui header">{post.title}</h1>
             <p>By: {post.author.name}</p>
             <div className='post-body' dangerouslySetInnerHTML={{ __html: post.content }}></div>

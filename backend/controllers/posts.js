@@ -1,12 +1,13 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
+const { cloudinary } = require('../cloudinary');
 
 module.exports = {
   async getPosts(req, res, next) {
     const posts = await Post.find({}).populate({
       path: 'author',
       model: 'User'
-    });
+    }).sort({ '_id': -1 });
     res.json(posts);
   },
   async postShow(req, res, next) {

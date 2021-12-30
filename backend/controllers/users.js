@@ -58,7 +58,7 @@ module.exports = {
   },
   async getProfile(req, res, next) {
     const user = await User.findById(req.params.id);
-    const posts = await Post.find().where('author').equals(req.params.id).limit(5).exec();
+    const posts = await Post.find().where('author').equals(req.params.id).limit(5).sort({ '_id': -1 }).exec();
 
     if (user) {
       res.json({
