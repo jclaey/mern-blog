@@ -24,10 +24,15 @@ module.exports = {
   },
   async postNew (req, res, next) {
     const { title, content, author } = req.body;
+    const file = req.file;
 
     const post = await Post.create({
       title,
       content,
+      image: {
+        path: file.path,
+        filename: file.filename
+      },
       author
     });
 
@@ -36,6 +41,7 @@ module.exports = {
         _id: post._id,
         title: post.title,
         content: post.content,
+        image: post.image,
         author: post.author
       });
     } else {

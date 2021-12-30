@@ -11,6 +11,10 @@ const NewPostScreen = () => {
   const [title, setTitle] = useState('');
   let content;
 
+  const [dirty, setDirty] = useState(false);
+
+  const initialValue = '<p>Write your post here...</p>';
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,7 +25,9 @@ const NewPostScreen = () => {
     if (!userInfo) {
       navigate('/login');
     }
-  }, [userInfo, navigate]);
+
+    setDirty(false);
+  }, [userInfo, navigate, initialValue]);
 
   const onEditorChange = (e) => {
     content = e.target.getContent();
@@ -29,8 +35,9 @@ const NewPostScreen = () => {
 
   const onFormSubmit = e => {
     e.preventDefault();
+    const image = document.querySelector('#post-image').files[0];
 
-    dispatch(createPost(title, content, userInfo._id));
+    dispatch(createPost({ title, content, image, author: userInfo._id }));
     navigate(`/${userInfo._id}/profile`);
   };
 
@@ -51,11 +58,20 @@ const NewPostScreen = () => {
             />
           </div>
           <div className="field">
+            <label>Featured Image</label>
+            <input 
+              id="post-image"
+              type="file"
+              name="image"
+            />
+          </div>
+          <div className="field">
             <label>Post Content</label>
             <Editor
               apiKey='u7jtsuz1glcmvd4obg3mihkfv74kpuhtx7qhydm5uc9j6u7e'
               onChange={onEditorChange}
-              initialValue="<p>Initial content</p>"
+              initialValue={initialValue}
+              onDirty={() => setDirty(true)}
               init={{
                 height: 500,
                 menubar: false,
@@ -72,7 +88,7 @@ const NewPostScreen = () => {
               }}
             />
           </div>
-          <button className="ui button" type="submit">Create</button>
+          <button className={`ui ${!dirty ? 'disabled' : ''} button`} type="submit">Create</button>
         </form>
       }
     </div>

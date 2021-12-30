@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer({ 'dest': 'uploads/' });
 const asyncHandler = require('express-async-handler');
 const { isAuthorized } = require('../middleware');
 const {
@@ -21,6 +23,6 @@ router.put('/:id/comments/:comment_id/edit', isAuthorized, asyncHandler(commentU
 
 router.put('/:id/edit', isAuthorized, asyncHandler(postUpdate));
 
-router.post('/new', asyncHandler(postNew));
+router.post('/new', upload.single('image'), asyncHandler(postNew));
 
 module.exports = router;

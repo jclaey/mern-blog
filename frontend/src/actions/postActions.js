@@ -61,17 +61,23 @@ export const listPostDetails = id => async dispatch => {
   }
 };
 
-export const createPost = (title, content, author) => async dispatch => {
+export const createPost = (obj) => async dispatch => {
   try {
     dispatch({ type: POST_CREATE_REQUEST });
 
+    const formData = new FormData();
+
+    for (let prop in obj) {
+      formData.append(prop, obj[prop]);
+    }
+
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     };
 
-    const { data } = await axios.post('/api/posts/new', { title, content, author }, config);
+    const { data } = await axios.post('/api/posts/new', formData, config);
 
     dispatch({ 
       type: POST_CREATE_SUCCESS,
