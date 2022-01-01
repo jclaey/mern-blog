@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { listPostDetails, createComment, updatePostComment } from '../actions/postActions';
-import { POST_CREATE_COMMENT_RESET } from '../constants/postConstants';
+import { 
+  listPostDetails, 
+  createComment, 
+  updatePostComment, 
+  deletePost, 
+  deleteComment 
+} from '../actions/postActions';
+import { POST_CREATE_COMMENT_RESET, POST_DELETE_COMMENT_RESET } from '../constants/postConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
@@ -15,6 +21,7 @@ const PostScreen = () => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { loading, error, post } = useSelector(state => state.postDetails);
   const { userInfo } = useSelector(state => state.userLogin);
@@ -27,6 +34,8 @@ const PostScreen = () => {
     success: successCommentUpdate,
     updatedComment
   } = useSelector(state => state.postCommentUpdate);
+  const { error: errorPostDelete } = useSelector(state => state.postDelete);
+  const { success: successCommentDelete } = useSelector(state => state.postCommentDelete);
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -35,8 +44,13 @@ const PostScreen = () => {
 
   const editCommentForm = document.querySelector('#edit-comment-form');
 
-  const onEditClick = e => {
+  const onEditClick = () => {
     editCommentForm.style.display = 'block';
+  };
+
+  const onDeleteClick = (commentId) => {
+    dispatch(deleteComment(id, commentId));
+    setHasCommented(false);
   };
 
   const onCommentEditFormSubmit = (e, postId, commentId, commentBody) => {
@@ -47,14 +61,23 @@ const PostScreen = () => {
     }
   };
 
+  const onDeletePostConfirm = e => {
+    dispatch(deletePost(id));
+    navigate(`/${userInfo._id}/profile`);
+  };
+
   useEffect(() => {
     if (successCommentCreate) {
       setBody('');
       dispatch({ type: POST_CREATE_COMMENT_RESET });
     }
 
+    if (successCommentDelete) {
+      dispatch({ type: POST_DELETE_COMMENT_RESET });
+    }
+
     dispatch(listPostDetails(id));
-  }, [dispatch, id, successCommentCreate]);
+  }, [dispatch, id, successCommentCreate, successCommentDelete]);
 
   useEffect(() => {
     if (userInfo && userInfo._id === post.author._id) {
@@ -71,7 +94,7 @@ const PostScreen = () => {
   }, [post, userInfo]);
 
   useEffect(() => {
-    if (updatedComment) {
+    if (updatedComment && updatedComment.name) {
       setHasUpdatedComment(true);
     }
   }, [updatedComment]);
@@ -79,47 +102,55 @@ const PostScreen = () => {
   const renderComments = () => {
     if (post.comments.length === 0) {
       return <p>No comments</p>
-    }
-
-    return post.comments.map(comment => {
-      return (
-        <div className="comment" key={comment._id}>
-          <div className="content">
-            <Link to={`/${comment.author}/profile`} className="author">
-              {comment.name}
-            </Link>
-            <div className="metadata">
-              <span className="date">{comment.date.slice(0, 10)}</span>
-            </div>
-            <div className="text">
-              {comment.body}
-              {userInfo && userInfo._id === comment.author 
-                ? <span 
-                    style={{cursor: 'pointer', display: 'block', marginTop: '1rem'}}
-                    onClick={onEditClick}
-                  >
-                    <strong>Edit Comment</strong>
-                  </span>
-                : ''}
-            </div>
-            <div id="edit-comment-form" style={{display: 'none'}}>
-              {errorCommentUpdate && <Message type="warning">{errorCommentUpdate}</Message>}
-              {successCommentUpdate && <Message type="success">Comment updated</Message>}
-              <form className="ui reply form" onSubmit={e => onCommentEditFormSubmit(e, id, comment._id, editCommentBody)}>
-                <div className="field">
-                  <textarea
-                    name="body"
-                    value={editCommentBody}
-                    onChange={e => setEditCommentBody(e.target.value)}
-                  ></textarea>
-                </div>
-                <button className="ui button" type="submit">Update</button>
-              </form>
+    } else {
+      return post.comments.map(comment => {
+        return (
+          <div className="comment" key={comment._id}>
+            <div className="content">
+              <Link to={`/${comment.author}/profile`} className="author">
+                {comment.name}
+              </Link>
+              <div className="metadata">
+                <span className="date">{comment.date.slice(0, 10)}</span>
+              </div>
+              <div className="text">
+                {comment.body}
+                {userInfo && userInfo._id === comment.author 
+                  ? <div style={{marginTop: '0.5rem'}}>
+                      <span 
+                          style={{cursor: 'pointer', display: 'inline', marginTop: '1rem'}}
+                          onClick={onEditClick}
+                        >
+                          <strong>Edit Comment</strong>
+                        </span>
+                        <span 
+                          style={{cursor: 'pointer', display: 'inline', marginTop: '1rem', color: 'red', paddingLeft: '10px'}}
+                          onClick={() => onDeleteClick(comment._id)}
+                        >
+                        <strong>Delete Comment</strong>
+                      </span>
+                    </div>
+                  : ''}
+              </div>
+              <div id="edit-comment-form" style={{display: 'none'}}>
+                {errorCommentUpdate && <Message type="warning">{errorCommentUpdate}</Message>}
+                {successCommentUpdate && <Message type="success">Comment updated</Message>}
+                <form className="ui reply form" onSubmit={e => onCommentEditFormSubmit(e, id, comment._id, editCommentBody)}>
+                  <div className="field">
+                    <textarea
+                      name="body"
+                      value={editCommentBody}
+                      onChange={e => setEditCommentBody(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <button className="ui button" type="submit">Update</button>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    });
+        );
+      });
+    }
   };
 
   return (
@@ -128,15 +159,35 @@ const PostScreen = () => {
         <div>
           <div className="post-container">
             {post.image && <img className='ui fluid image' src={post.image.path} alt={`${post.title} showcase`} />}
+            {errorPostDelete && <Message type="warning">{errorPostDelete}</Message>}
             <h1 className="ui header">{post.title}</h1>
             <p>By: {post.author.name}</p>
             <div className='post-body' dangerouslySetInnerHTML={{ __html: post.content }}></div>
             {isPostOwner && 
-              <Link to={`/post/${post._id}/edit`}>
-                <div>
-                  <button className="ui button">Edit Post</button>
+              <div>
+                <div id="post-delete-alert" className="ui warning message" style={{display: 'none'}}>
+                  <div className="header" style={{marginBottom: '1rem'}}>
+                    Are you sure you want to delete this post forever?
+                  </div>
+                  <div>
+                    <button 
+                      className="ui green button"
+                      onClick={onDeletePostConfirm}
+                    >Yes</button>
+                    <button 
+                      className="ui red button"
+                      onClick={() => document.querySelector('#post-delete-alert').style.display = 'none'}
+                    >No</button>
+                  </div>
                 </div>
-              </Link>
+                <Link to={`/post/${post._id}/edit`}>
+                  <button className="ui button">Edit Post</button>
+                </Link>
+                <button 
+                  className="ui red button"
+                  onClick={() => document.querySelector('#post-delete-alert').style.display = 'block'}
+                >Delete Post</button>
+              </div>
             }
           </div>
           <div id="comments-area" className="ui comments">

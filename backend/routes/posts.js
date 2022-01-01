@@ -11,19 +11,25 @@ const {
   postNew,
   commentCreate,
   postUpdate,
-  commentUpdate
+  commentUpdate,
+  postDelete,
+  commentDelete
 } = require('../controllers/posts');
 
 router.get('/', asyncHandler(getPosts));
 
+router.post('/new', upload.single('image'), asyncHandler(postNew));
+
 router.get('/:id', asyncHandler(postShow));
+
+router.put('/:id/edit', isAuthorized, upload.single('image'), asyncHandler(postUpdate));
+
+router.delete('/:id/delete', isAuthorized, asyncHandler(postDelete));
 
 router.post('/:id/comments', isAuthorized, asyncHandler(commentCreate));
 
 router.put('/:id/comments/:comment_id/edit', isAuthorized, asyncHandler(commentUpdate));
 
-router.put('/:id/edit', isAuthorized, upload.single('image'), asyncHandler(postUpdate));
-
-router.post('/new', upload.single('image'), asyncHandler(postNew));
+router.delete('/:id/comments/:comment_id/delete', isAuthorized, asyncHandler(commentDelete));
 
 module.exports = router;

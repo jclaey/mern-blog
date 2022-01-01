@@ -18,7 +18,13 @@ import {
   POST_UPDATE_FAIL,
   POST_UPDATE_COMMENT_REQUEST,
   POST_UPDATE_COMMENT_SUCCESS,
-  POST_UPDATE_COMMENT_FAIL
+  POST_UPDATE_COMMENT_FAIL,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
+  POST_DELETE_COMMENT_REQUEST,
+  POST_DELETE_COMMENT_SUCCESS,
+  POST_DELETE_COMMENT_FAIL
 } from '../constants/postConstants';
 
 export const listPosts = () => async dispatch => {
@@ -61,14 +67,14 @@ export const listPostDetails = id => async dispatch => {
   }
 };
 
-export const createPost = (obj) => async dispatch => {
+export const createPost = post => async dispatch => {
   try {
     dispatch({ type: POST_CREATE_REQUEST });
 
     const formData = new FormData();
 
-    for (let prop in obj) {
-      formData.append(prop, obj[prop]);
+    for (let key in post) {
+      formData.append(key, post[key]);
     }
 
     const config = {
@@ -123,16 +129,22 @@ export const updatePost = (id, post) => async (dispatch, getState) => {
   try {
     dispatch({ type: POST_UPDATE_REQUEST });
 
+    const formData = new FormData();
+
+    for (let key in post) {
+      formData.append(key, post[key]);
+    }
+
     const { userLogin: { userInfo } } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${userInfo.token}`
       }
     };
 
-    const { data } = await axios.put(`/api/posts/${id}/edit`, post, config);
+    const { data } = await axios.put(`/api/posts/${id}/edit`, formData, config);
 
     dispatch({
       type: POST_UPDATE_SUCCESS,
@@ -172,6 +184,60 @@ export const updatePostComment = (id, commentId, body) => async (dispatch, getSt
       type: POST_UPDATE_COMMENT_FAIL,
       payload: error.response && error.response.data.message 
         ? error.response.data.message 
+        : error.message
+    });
+  }
+};
+
+export const deletePost = id => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_DELETE_REQUEST });
+
+    const { userLogin: { userInfo } } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
+    await axios.delete(`/api/posts/${id}/delete`, config);
+
+    dispatch({ type: POST_DELETE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: POST_DELETE_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    });
+  }
+};
+
+export const deleteComment = (id, commentId) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: POST_DELETE_COMMENT_REQUEST });
+
+    const { userLogin: { userInfo } } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
+      }
+    };
+
+    console.log(commentId);
+
+    await axios.delete(`/api/posts/${id}/comments/${commentId}/delete`, config);
+
+    dispatch({ type: POST_DELETE_COMMENT_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: POST_DELETE_COMMENT_FAIL,
+      payload: error.response && error.response.data.message
+        ? error.response.data.message
         : error.message
     });
   }

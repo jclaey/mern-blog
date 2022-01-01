@@ -87,12 +87,20 @@ module.exports = {
   },
   async postUpdate(req, res, next) {
     const { title, content } = req.body;
+    const file = req.file;
 
     const post = await Post.findById(req.params.id);
 
     if (post) {
       post.title = title || post.title;
       post.content = content || post.content;
+
+      if (file) {
+        await cloudinary.uploader.destroy(post.image.filename);
+
+        post.image.path = file.path;
+        post.image.filename = file.filename;
+      }
 
       await post.save();
 
@@ -123,5 +131,25 @@ module.exports = {
       res.status(404);
       throw new Error('Comment not found');
     }
+  },
+  async postDelete(req, res, next) {
+    const post = await Post.findById(req.params.id);
+
+    if (post) {
+      await cloudinary.uploader.destroy(post.image.filename);
+      await post.remove();
+
+      res.status(201).json({ message: 'Post deleted' });
+    } else {
+      res.status(404);
+      throw new Error('Post not found');
+    }
+  },
+  async commentDelete(req, res, next) {
+    await Post.findByIdAndUpdate(req.params.id, {
+      "$pull": { "comments": { "_id": req.params.comment_id } }
+    });
+
+    res.status(201).json({ message: 'Comment deleted' });
   }
 };

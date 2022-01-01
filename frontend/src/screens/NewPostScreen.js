@@ -31,7 +31,7 @@ const NewPostScreen = () => {
 
   const onEditorChange = (e) => {
     content = e.target.getContent();
-  }
+  };
 
   const onFormSubmit = e => {
     e.preventDefault();

@@ -7,6 +7,7 @@ import { getUserDetails } from '../actions/userActions';
 
 const ProfileScreen = () => {
   const [isOwner, setIsOwner] = useState(false);
+
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -24,6 +25,7 @@ const ProfileScreen = () => {
     } else {
       setIsOwner(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userInfo, id, user]);
 
   const renderedPosts = user.posts.map(post => {

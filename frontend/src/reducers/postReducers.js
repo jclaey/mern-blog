@@ -18,7 +18,15 @@ import {
   POST_UPDATE_FAIL,
   POST_UPDATE_COMMENT_REQUEST,
   POST_UPDATE_COMMENT_SUCCESS,
-  POST_UPDATE_COMMENT_FAIL
+  POST_UPDATE_COMMENT_FAIL,
+  POST_UPDATE_COMMENT_RESET,
+  POST_DELETE_REQUEST,
+  POST_DELETE_SUCCESS,
+  POST_DELETE_FAIL,
+  POST_DELETE_COMMENT_REQUEST,
+  POST_DELETE_COMMENT_SUCCESS,
+  POST_DELETE_COMMENT_FAIL,
+  POST_DELETE_COMMENT_RESET
 } from '../constants/postConstants';
 
 export const postListReducer = (state = { posts: [] }, action) => {
@@ -98,6 +106,36 @@ export const postCommentUpdateReducer = (state = {}, action) => {
       return { loading: false, success: true, updatedComment: action.payload }
     case POST_UPDATE_COMMENT_FAIL:
       return { loading: false, error: action.payload }
+    case POST_UPDATE_COMMENT_RESET:
+      return {}
+    default:
+      return state
+  }
+};
+
+export const postDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_DELETE_REQUEST:
+      return { loading: true }
+    case POST_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case POST_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+};
+
+export const postCommentDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case POST_DELETE_COMMENT_REQUEST:
+      return { loading: true }
+    case POST_DELETE_COMMENT_SUCCESS:
+      return { loading: false, success: true }
+    case POST_DELETE_COMMENT_FAIL:
+      return { loading: false, error: action.payload }
+    case POST_DELETE_COMMENT_RESET:
+      return {}
     default:
       return state
   }

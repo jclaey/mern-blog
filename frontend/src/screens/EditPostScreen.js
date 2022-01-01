@@ -1,13 +1,15 @@
+/* eslint-disable no-multi-str */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Editor } from '@tinymce/tinymce-react';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { updatePost, listPostDetails } from '../actions/postActions';
 
 const EditPostScreen = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  let content;
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -15,7 +17,9 @@ const EditPostScreen = () => {
 
   const { userInfo } = useSelector(state => state.userLogin);
   const { error, loading, post } = useSelector(state => state.postDetails);
-  const { error: errorPostUpdate, loading: loadingPostUpdate, success} = useSelector(state => state.postUpdate);
+  const { error: errorPostUpdate, loading: loadingPostUpdate} = useSelector(state => state.postUpdate);
+
+  const initialValue = post.content;
 
   useEffect(() => {
     if(!userInfo) {
@@ -25,18 +29,25 @@ const EditPostScreen = () => {
         dispatch(listPostDetails(id));
       } else {
         setTitle(post.title);
-        setContent(post.content);
       }
     }
   }, [userInfo, navigate, dispatch, id, post]);
 
+  const onEditorChange = (e) => {
+    content = e.target.getContent();
+  };
+
   const onFormSubmit = e => {
     e.preventDefault();
+    const image = document.querySelector('#post-image').files[0];
 
     dispatch(updatePost(id, {
       title,
-      content
+      content: content || initialValue,
+      image
     }));
+
+    navigate(`/post/${post._id}`);
   };
 
   return (
@@ -44,7 +55,6 @@ const EditPostScreen = () => {
       <h1>Edit Post</h1>
       {error && <Message type="warning">{error}</Message>}
       {errorPostUpdate && <Message type="warning">{errorPostUpdate}</Message>}
-      {success && <Message type="success">Update successful</Message>}
       {loadingPostUpdate ? <Loader /> : loading ? <Loader /> :
         <form className="ui form" onSubmit={onFormSubmit}>
           <div className="field">
@@ -58,15 +68,36 @@ const EditPostScreen = () => {
             />
           </div>
           <div className="field">
-            <label>Post Content</label>
-            <textarea 
-              name="content"
-              value={content}
-              onChange={e => setContent(e.target.value)}
-              placeholder="Write your blog post here..."
-            ></textarea>
+            <label>Featured Image</label>
+            <input 
+              id="post-image"
+              type="file"
+              name="image"
+            />
           </div>
-          <button className="ui button" type="submit">Save Changes</button>
+          <div className="field">
+            <label>Post Content</label>
+            <Editor
+              apiKey='u7jtsuz1glcmvd4obg3mihkfv74kpuhtx7qhydm5uc9j6u7e'
+              onChange={onEditorChange}
+              initialValue={initialValue}
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image',
+                  'charmap print preview anchor help',
+                  'searchreplace visualblocks code',
+                  'insertdatetime media table paste wordcount'
+                ],
+                toolbar:
+                  'undo redo | formatselect | bold italic | \
+                  alignleft aligncenter alignright | \
+                  bullist numlist outdent indent | help'
+              }}
+            />
+          </div>
+          <button className='ui button' type="submit">Save Changes</button>
         </form>
       }
     </div>
