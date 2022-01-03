@@ -5,8 +5,7 @@ import {
   listPostDetails, 
   createComment, 
   updatePostComment, 
-  deletePost, 
-  deleteComment 
+  deletePost,
 } from '../actions/postActions';
 import { POST_CREATE_COMMENT_RESET, POST_DELETE_COMMENT_RESET } from '../constants/postConstants';
 import Loader from '../components/Loader';
@@ -46,11 +45,6 @@ const PostScreen = () => {
 
   const onEditClick = () => {
     editCommentForm.style.display = 'block';
-  };
-
-  const onDeleteClick = (commentId) => {
-    dispatch(deleteComment(id, commentId));
-    setHasCommented(false);
   };
 
   const onCommentEditFormSubmit = (e, postId, commentId, commentBody) => {
@@ -123,12 +117,19 @@ const PostScreen = () => {
                         >
                           <strong>Edit Comment</strong>
                         </span>
-                        <span 
-                          style={{cursor: 'pointer', display: 'inline', marginTop: '1rem', color: 'red', paddingLeft: '10px'}}
-                          onClick={() => onDeleteClick(comment._id)}
-                        >
-                        <strong>Delete Comment</strong>
-                      </span>
+                        <Link to={`/post/${post._id}/comments/${comment._id}/delete`}>
+                          <span 
+                            style={{
+                              cursor: 'pointer', 
+                              display: 'inline', 
+                              marginTop: '1rem', 
+                              color: 'red', 
+                              paddingLeft: '10px'
+                            }}
+                          >
+                          <strong>Delete Comment</strong>
+                        </span>
+                      </Link>
                     </div>
                   : ''}
               </div>
@@ -205,12 +206,27 @@ const PostScreen = () => {
                     <div className="text">
                       {updatedComment.body}
                       {userInfo && userInfo._id === updatedComment.author 
-                        ? <span 
-                            style={{cursor: 'pointer', display: 'block', marginTop: '1rem'}}
-                            onClick={onEditClick}
-                          >
-                            <strong>Edit Comment</strong>
-                          </span>
+                        ? <div>
+                            <span 
+                              style={{cursor: 'pointer', display: 'block', marginTop: '1rem'}}
+                              onClick={onEditClick}
+                            >
+                              <strong>Edit Comment</strong>
+                            </span>
+                            <Link to={`/post/${post._id}/comments/${updatedComment._id}/delete`}>
+                              <span 
+                                style={{
+                                  cursor: 'pointer', 
+                                  display: 'inline', 
+                                  marginTop: '1rem', 
+                                  color: 'red', 
+                                  paddingLeft: '10px'
+                                }}
+                              >
+                                <strong>Delete Comment</strong>
+                              </span>
+                            </Link>
+                          </div>
                         : ''}
                     </div>
                     <div id="edit-comment-form" style={{display: 'none'}}>
