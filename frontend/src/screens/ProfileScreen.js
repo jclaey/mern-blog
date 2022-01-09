@@ -25,7 +25,6 @@ const ProfileScreen = () => {
     } else {
       setIsOwner(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userInfo, id, user]);
 
   const renderedPosts = user.posts.map(post => {
@@ -58,7 +57,14 @@ const ProfileScreen = () => {
       </div>
       <div className='ui relaxed divided list' id="profile-posts">
         <h2>Recent Posts</h2>
-        {renderedPosts}
+        {user.posts ? 
+          <div>
+            {renderedPosts}
+          </div> : 
+          <div>
+            <p>No posts</p>
+          </div>
+        }
       </div>
     </div>
   );
