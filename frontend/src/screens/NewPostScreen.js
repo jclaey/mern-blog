@@ -9,6 +9,7 @@ import { createPost } from '../actions/postActions';
 
 const NewPostScreen = () => {
   const [title, setTitle] = useState('');
+  
   let content;
 
   const [dirty, setDirty] = useState(false);
