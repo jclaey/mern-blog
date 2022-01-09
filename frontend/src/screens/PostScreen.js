@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   listPostDetails, 
   createComment, 
-  updatePostComment, 
-  deletePost,
+  updatePostComment
 } from '../actions/postActions';
 import { POST_CREATE_COMMENT_RESET, POST_DELETE_COMMENT_RESET } from '../constants/postConstants';
 import Loader from '../components/Loader';
@@ -20,7 +19,6 @@ const PostScreen = () => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { loading, error, post } = useSelector(state => state.postDetails);
   const { userInfo } = useSelector(state => state.userLogin);
@@ -53,11 +51,6 @@ const PostScreen = () => {
     if (hasUpdatedComment) {
       setHasUpdatedComment(false);
     }
-  };
-
-  const onDeletePostConfirm = e => {
-    dispatch(deletePost(id));
-    navigate(`/${userInfo._id}/profile`);
   };
 
   useEffect(() => {
@@ -166,28 +159,12 @@ const PostScreen = () => {
             <div className='post-body' dangerouslySetInnerHTML={{ __html: post.content }}></div>
             {isPostOwner && 
               <div>
-                <div id="post-delete-alert" className="ui warning message" style={{display: 'none'}}>
-                  <div className="header" style={{marginBottom: '1rem'}}>
-                    Are you sure you want to delete this post forever?
-                  </div>
-                  <div>
-                    <button 
-                      className="ui green button"
-                      onClick={onDeletePostConfirm}
-                    >Yes</button>
-                    <button 
-                      className="ui red button"
-                      onClick={() => document.querySelector('#post-delete-alert').style.display = 'none'}
-                    >No</button>
-                  </div>
-                </div>
                 <Link to={`/post/${post._id}/edit`}>
                   <button className="ui button">Edit Post</button>
                 </Link>
-                <button 
-                  className="ui red button"
-                  onClick={() => document.querySelector('#post-delete-alert').style.display = 'block'}
-                >Delete Post</button>
+                <Link to={`/post/${id}/delete`}>
+                  <button className="ui red button">Delete Post</button>
+                </Link>
               </div>
             }
           </div>

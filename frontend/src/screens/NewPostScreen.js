@@ -1,7 +1,7 @@
 /* eslint-disable no-multi-str */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -29,16 +29,13 @@ const NewPostScreen = () => {
     setDirty(false);
   }, [userInfo, navigate, initialValue]);
 
-  const onEditorChange = (e) => {
+  const onEditorChange = e => {
     content = e.target.getContent();
   };
 
-  const onFormSubmit = e => {
-    e.preventDefault();
+  const onFormSubmit = () => {
     const image = document.querySelector('#post-image').files[0];
-
     dispatch(createPost({ title, content, image, author: userInfo._id }));
-    navigate(`/${userInfo._id}/profile`);
   };
 
   return (
@@ -46,7 +43,7 @@ const NewPostScreen = () => {
       <h1>Create A New Post</h1>
       {error && <Message type="warning">{error}</Message>}
       {loading ? <Loader /> : 
-        <form className="ui form" onSubmit={onFormSubmit}>
+        <form className="ui form">
           <div className="field">
             <label>Post Title</label>
             <input 
@@ -88,7 +85,9 @@ const NewPostScreen = () => {
               }}
             />
           </div>
-          <button className={`ui ${!dirty ? 'disabled' : ''} button`} type="submit">Create</button>
+          <Link to={`/${userInfo._id}/profile`}>
+            <button onClick={onFormSubmit} className={`ui ${!dirty ? 'disabled' : ''} button`}>Create</button>
+          </Link>
         </form>
       }
     </div>
