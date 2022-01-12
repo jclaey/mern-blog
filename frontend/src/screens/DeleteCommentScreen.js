@@ -7,7 +7,7 @@ const DeleteCommentScreen = () => {
   const dispatch = useDispatch();
   const { id, comment_id } = useParams();
 
-  const onDeleteClick = (e, commentId) => {
+  const onDeleteClick = (commentId) => {
     dispatch(deleteComment(id, commentId));
   };
 
@@ -20,7 +20,7 @@ const DeleteCommentScreen = () => {
         <Link to={`/post/${id}`}>
           <button 
             className="ui green button"
-            onClick={e => onDeleteClick(e, comment_id)}
+            onClick={() => onDeleteClick(comment_id)}
           >
             Yes
           </button>
