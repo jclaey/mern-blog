@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
-  listPostDetails, 
-  createComment, 
+  listPostDetails,
+  createComment,
   updatePostComment
 } from '../actions/postActions';
 import { POST_CREATE_COMMENT_RESET, POST_DELETE_COMMENT_RESET } from '../constants/postConstants';

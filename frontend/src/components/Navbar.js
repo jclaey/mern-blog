@@ -25,16 +25,16 @@ const Header = () => {
                 <i className="user circle icon"></i>Profile
               </span>
             </Link>
-            <Link to={'/post/new'} className="item">
+            <Link to='/post/new' className="item">
               <span className="link item">
               <i className="plus icon"></i>New Post
               </span>
             </Link>
-            <button className="link item" onClick={onLogoutClick}>
+            <Link to='/' className="link item" onClick={onLogoutClick}>
               <span className="item">
               <i className="sign-out icon"></i>Logout
               </span>
-            </button>
+            </Link>
           </div>
            :
           <div className="right menu">
