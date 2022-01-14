@@ -1,11 +1,12 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteComment } from '../actions/postActions';
 import Modal from '../components/Modal';
 
 const DeleteCommentScreen = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id, comment_id } = useParams();
 
   const onDeleteClick = (commentId) => {
@@ -37,6 +38,7 @@ const DeleteCommentScreen = () => {
         header="Delete Comment"
         content="Are you sure you want to delete this comment forever?"
         actions={actions}
+        onDismiss={() => navigate(`/post/${id}`)}
       />
     </div>
   );

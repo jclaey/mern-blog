@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useNavigate, useParams } from 'react-router-dom';
 
-const Modal = ({ header, content, actions }) => {
-  const navigate = useNavigate();
-
-  const { id } = useParams();
-
+const Modal = ({ header, content, actions, onDismiss }) => {
   return ReactDOM.createPortal(
     <div
-      onClick={() => navigate(`/post/${id}`)}
+      onClick={onDismiss}
       className="ui dimmer modals visible active"
     >
       <div 
