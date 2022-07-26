@@ -1,5 +1,5 @@
 # mern-blog
-A Mongoose/Express/React/Node full-stack blogging web application developed using the MVC pattern and RESTful conventions. 
+A Mongoose/Express/React/Node full-stack blogging web application developed using the MVC architecture pattern and RESTful conventions. 
 The application utilizes Redux for app-level state management, MongoDB and Mongoose for storing and modeling data, React-Router for navigation, JSON Web Tokens for authorization, BCrypt for encryption, and TinyMCE's React integration for rich-text editing. Images are stored using the Cloudinary API, with Multer handling multipart form data. Styled with Semantic-UI.
 ![home page](https://res.cloudinary.com/dsuch7fys/image/upload/v1658462249/github-images/mern-blog/home-guest_zv7qkq.png)
 ## Features
