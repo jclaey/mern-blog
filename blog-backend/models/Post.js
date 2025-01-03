@@ -10,12 +10,10 @@ const PostSchema = new Schema({
       type: String,
       required: true
     },
-    images: [
-      {
+    image: {
         path: String,
         filename: String
-      }
-    ],
+    },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'Admin'

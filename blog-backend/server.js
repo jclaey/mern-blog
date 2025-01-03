@@ -3,6 +3,7 @@ import express from 'express'
 import connectDB from './config/db.js'
 import cors from 'cors'
 import morgan from 'morgan'
+import multer from 'multer'
 import adminRouter from './routes/admin/index.js'
 import postsRouter from './routes/posts/index.js'
 const PORT = process.env.PORT || 5000
@@ -29,11 +30,26 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode
-    res.status(statusCode)
-    res.json({
-        message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    console.error(`Error: ${err.message}`)
+
+    if (err instanceof multer.MulterError) {
+        res.status(400).json({ message: err.message });
+    } else if (err.message === 'Invalid file type. Only image files are allowed.') {
+        res.status(400).json({ message: err.message });
+    } else {
+        const statusCode = res.statusCode === 200 ? 500 : res.statusCode
+        res.status(statusCode)
+        res.json({
+            message: err.message,
+            stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+        })
+    }
+})
+
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received. Closing server...')
+    server.close(() => {
+        console.log('Server closed.')
     })
 })
 

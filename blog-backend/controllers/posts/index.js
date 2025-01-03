@@ -2,27 +2,27 @@ import Post from '../../models/Post.js'
 
 export const postNew = async (req, res, next) => {
     try {
-        const { title, content, author } = req.body
+        const { title, content } = req.body
 
         if (!title || !content) {
             res.status(400);
             throw new Error('Please provide all required fields');
         }
 
-        let images = req.files || []
+        let image = req.file || {}
 
         const post = await Post.create({
             title,
             content,
-            images,
-            author
+            image,
+            author: req.session.adminId
         })
 
         res.status(201).json({
             _id: post._id,
             title: post.title,
             content: post.content,
-            images: post.images,
+            image: post.image,
             author: post.author
         })
     } catch (err) {

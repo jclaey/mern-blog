@@ -1,6 +1,19 @@
 import express from 'express'
 const router = express.Router()
+import multer from 'multer'
+import { storage } from '../../cloudinary/index.js'
 import asyncHandler from '../../middleware/async.js'
+import { imageFileFilter } from '../../utils/fileFilter.js'
+const upload = multer({ 
+    storage,
+    imageFileFilter,
+    limits: { fileSize: 1024 * 1024 * 5 }
+})
+
+import {
+    validatePostTitle,
+    validatePostContent
+} from '../validators.js'
 
 import {
     getPosts, 
@@ -8,6 +21,9 @@ import {
 } from '../../controllers/posts/index.js'
 
 router.route('/').get(asyncHandler(getPosts))
-router.route('/new').post(asyncHandler(postNew))
+router.route('/new').post(upload.single('image'), [
+    validatePostTitle,
+    validatePostContent
+], asyncHandler(postNew))
 
 export default router
