@@ -21,14 +21,20 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/posts', postsRouter)
 app.use('/api/admin', adminRouter)
 
+app.use((req, res, next) => {
+    res.status(404)
+    const error = new Error(`Not Found - ${req.originalUrl}`)
+    next(error);
+})
+
 app.use((err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode; // Default to 500 if status isn't set
     res.status(statusCode);
     res.json({
         message: err.message,
         stack: process.env.NODE_ENV === 'production' ? null : err.stack, // Hide stack in production
-    });
-});
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
