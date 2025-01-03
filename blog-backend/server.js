@@ -24,15 +24,15 @@ app.use('/api/admin', adminRouter)
 app.use((req, res, next) => {
     res.status(404)
     const error = new Error(`Not Found - ${req.originalUrl}`)
-    next(error);
+    next(error)
 })
 
 app.use((err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode; // Default to 500 if status isn't set
-    res.status(statusCode);
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode
+    res.status(statusCode)
     res.json({
         message: err.message,
-        stack: process.env.NODE_ENV === 'production' ? null : err.stack, // Hide stack in production
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack,
     })
 })
 
