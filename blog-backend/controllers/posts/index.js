@@ -4,7 +4,7 @@ export const postNew = async (req, res, next) => {
     try {
         const { title, content, author } = req.body
 
-        if (!title || !content || !author) {
+        if (!title || !content) {
             res.status(400);
             throw new Error('Please provide all required fields');
         }
@@ -26,7 +26,7 @@ export const postNew = async (req, res, next) => {
             author: post.author
         })
     } catch (err) {
-        next(error)
+        next(err)
     }
 }
 
