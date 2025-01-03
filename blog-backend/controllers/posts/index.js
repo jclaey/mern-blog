@@ -30,6 +30,31 @@ export const postNew = async (req, res, next) => {
     }
 }
 
-export const getPosts = (req, res, next) => {
+export const getPosts = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+        const skip = (page - 1) * limit
 
+        const filter = {};
+        if (req.query.author) filter.author = req.query.author;
+        if (req.query.title) filter.title = new RegExp(req.query.title, 'i');
+
+        const posts = await Post.find({})
+            .populate({ path: 'author' })
+            .sort({ '_id': -1 })
+            .skip(skip)
+            .limit(limit)
+
+        const totalPosts = await Post.countDocuments()
+
+        res.status(200).json({
+            totalPosts,
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            posts
+        })
+    } catch (err) {
+        next(err)
+    }
 }
