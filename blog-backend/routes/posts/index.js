@@ -11,14 +11,14 @@ const upload = multer({
 })
 
 import {
-    validatePostTitle,
-    validatePostContent
-} from '../validators.js'
-
-import {
     getPosts, 
     postNew
 } from '../../controllers/posts/index.js'
+
+import { 
+    validatePostTitle,
+    validatePostContent
+} from '../validators.js'
 
 router.route('/').get(asyncHandler(getPosts))
 router.route('/new').post(upload.single('image'), [
