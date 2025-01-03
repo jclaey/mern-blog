@@ -1,10 +1,11 @@
 import 'dotenv/config'
-dotenv.config()
 import express from 'express'
-import connectDB from './config/db'
+import connectDB from './config/db.js'
+import cors from 'cors'
+import morgan from 'morgan'
 import adminRouter from './routes/admin/index.js'
 import postsRouter from './routes/posts/index.js'
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 5000
 
 connectDB()
 
