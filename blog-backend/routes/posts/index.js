@@ -7,7 +7,7 @@ import {
     postNew
 } from '../../controllers/posts/index.js'
 
-router.route('/').get(getPosts)
-router.route('/new').post(postNew)
+router.route('/').get(asyncHandler(getPosts))
+router.route('/new').post(asyncHandler(postNew))
 
 export default router
