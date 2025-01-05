@@ -10,6 +10,10 @@ const AdminSchema = Schema({
     password: {
         type: String,
         required: true
+    },
+    jwtRefreshToken: {
+        type: String,
+        default: null
     }
 })
 
