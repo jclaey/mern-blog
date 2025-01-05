@@ -1,4 +1,5 @@
 import crypto from 'node:crypto'
+import jwt from 'jsonwebtoken'
 import Admin from "../../models/Admin.js"
 
 export const login = async (req, res, next) => {
@@ -10,8 +11,8 @@ export const login = async (req, res, next) => {
         if (admin && await admin.comparePasswords(password)) {
             const token = jwt.sign(
                 { adminId: admin._id },
-                process.env.JWT_SECRET, // Store this securely in your environment variables
-                { expiresIn: '1h' }    // Token expires in 1 hour
+                process.env.JWT_SECRET, 
+                { expiresIn: '1h' }
             )
 
             res.status(200).json({
