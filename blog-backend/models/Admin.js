@@ -3,6 +3,10 @@ import bcrypt from 'bcryptjs'
 const Schema = mongoose.Schema
 
 const AdminSchema = Schema({
+    name: {
+        type: String,
+        default: 'YBS'
+    },
     email: {
         type: String,
         required: true

@@ -12,8 +12,11 @@ const upload = multer({
 })
 
 import {
-    getPosts, 
-    postNew
+    postsGet, 
+    postNew,
+    postGet,
+    postUpdate,
+    postDelete
 } from '../../controllers/posts/index.js'
 
 import { 
@@ -21,10 +24,16 @@ import {
     validatePostContent
 } from '../validators.js'
 
-router.route('/').get(asyncHandler(getPosts))
+router.route('/').get(asyncHandler(postsGet))
 router.route('/new').post(upload.single('image'), [
     validatePostTitle,
     validatePostContent
 ], handleValidationErrors, asyncHandler(postNew))
+router.route('/post/:id').get(asyncHandler(postGet))
+router.route('/post/:id/update').put(upload.single('image'), [
+    validatePostTitle,
+    validatePostContent
+], asyncHandler(postUpdate))
+router.route('/post/:id/delete').delete(asyncHandler(postDelete))
 
 export default router
