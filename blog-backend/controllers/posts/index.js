@@ -7,7 +7,7 @@ export const postNew = async (req, res, next) => {
         const { title, content } = req.body
 
         if (!title || !content) {
-            res.status(400);
+            res.status(400)
             throw new Error('Please provide all required fields')
         }
 
@@ -37,7 +37,7 @@ export const postsGet = async (req, res, next) => {
         const limit = parseInt(req.query.limit) || 10
         const skip = (page - 1) * limit
 
-        const filter = {};
+        const filter = {}
         if (req.query.author) filter.author = req.query.author
         if (req.query.title) filter.title = new RegExp(req.query.title, 'i')
 
