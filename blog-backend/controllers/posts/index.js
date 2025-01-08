@@ -8,7 +8,7 @@ export const postNew = async (req, res, next) => {
 
         if (!title || !content) {
             res.status(400);
-            throw new Error('Please provide all required fields');
+            throw new Error('Please provide all required fields')
         }
 
         let image = req.file || {}
@@ -38,8 +38,8 @@ export const postsGet = async (req, res, next) => {
         const skip = (page - 1) * limit
 
         const filter = {};
-        if (req.query.author) filter.author = req.query.author;
-        if (req.query.title) filter.title = new RegExp(req.query.title, 'i');
+        if (req.query.author) filter.author = req.query.author
+        if (req.query.title) filter.title = new RegExp(req.query.title, 'i')
 
         const posts = await Post.find({})
             .populate({ path: 'author' })
@@ -124,7 +124,7 @@ export const postDelete = async (req, res, next) => {
         }
 
         if (post.image && post.image.filename) {
-            await cloudinary.uploader.destroy(post.image.filename);
+            await cloudinary.uploader.destroy(post.image.filename)
         }
 
         await Post.findByIdAndDelete(req.params.id)
