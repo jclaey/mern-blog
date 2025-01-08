@@ -16,8 +16,7 @@ export const postNew = async (req, res, next) => {
         const post = await Post.create({
             title,
             content,
-            image,
-            author: req.session.adminId
+            image
         })
 
         res.status(201).json({
