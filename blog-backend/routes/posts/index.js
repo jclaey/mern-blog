@@ -30,7 +30,7 @@ router.route('/new').post(upload.single('image'), [
     validatePostContent
 ], handleValidationErrors, asyncHandler(postNew))
 router.route('/post/:id').get(asyncHandler(postGet))
-router.route('/post/:id/update').put(upload.single('image'), [
+router.route('/post/:id/update').patch(upload.single('image'), [
     validatePostTitle,
     validatePostContent
 ], asyncHandler(postUpdate))

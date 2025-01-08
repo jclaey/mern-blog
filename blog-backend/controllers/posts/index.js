@@ -67,7 +67,7 @@ export const postGet = async (req, res, next) => {
             return res.status(400).json({ message: 'Invalid post ID' })
         }
 
-        const post = await Product.findById(req.params.id)
+        const post = await Post.findById(req.params.id)
             .populate({ path: 'author', select: 'name' })
 
         if (!post) {
