@@ -4,7 +4,7 @@ import { Navbar, Nav } from 'react-bootstrap'
 
 const NavigationBar = () => (
   <Navbar bg="light" expand="lg">
-    <Navbar.Brand as={Link} to="/">My Blog</Navbar.Brand>
+    <Navbar.Brand as={Link} to="/" style={{ marginLeft: '2rem' }}>My Blog</Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
       <Nav className="me-auto">

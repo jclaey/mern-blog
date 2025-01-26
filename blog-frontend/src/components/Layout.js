@@ -5,15 +5,17 @@ import '../styles/style.css'
 
 const Layout = ({ children }) => {
     return (
-        <Container>
-            <header>
+        <>
+            <header style={{ marginBottom: '2rem' }}>
                 <NavigationBar />
             </header>
-            <main>
-                {children}
-            </main>
-            <Footer />
-        </Container>        
+            <Container>
+                <main>
+                    {children}
+                </main>
+                <Footer />
+            </Container>
+        </>    
     )
 }
 
