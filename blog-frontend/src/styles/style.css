@@ -1,7 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+}
+
 footer {
     display: flex;
     align-items: center;
     height: 250px;
+    width: 100vw;
+    background-color: #F8F9FA;
 }
 
 #styled-link {

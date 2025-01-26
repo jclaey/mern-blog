@@ -6,6 +6,8 @@ import Layout from './Layout.js'
 const Home = () => {
     const [posts, setPosts] = useState([])
     const [error, setError] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -29,7 +31,7 @@ const Home = () => {
             }
             <Card.Body>
                 <Card.Title>{post.title}</Card.Title>
-                <Card.Text>{post.description}</Card.Text>
+                <Card.Text>{post.content.slice(0, 30)}</Card.Text>
                 { post.author 
                    ? <Card.Text>By: {post.author.name}</Card.Text>
                    : ''

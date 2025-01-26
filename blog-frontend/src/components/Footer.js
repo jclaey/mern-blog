@@ -1,13 +1,14 @@
 import { Row, Col } from "react-bootstrap"
-import { Link } from "react-router-dom"
 import StyledLink from "./StyledLink.js"
 
 const Footer = () => {
     return (
         <footer>
-            <Row>
-                <Col>
-                    <h3>My Blog</h3>
+            <Row style={{ width: '100%' }}>
+                <Col style={{ marginLeft: '5rem' }}>
+                    <StyledLink to="/" fontSize={36}>
+                        My Blog
+                    </StyledLink>
                 </Col>
                 <Col>
                     <div>
