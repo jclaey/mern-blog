@@ -5,10 +5,8 @@ import StyledLink from './StyledLink.js'
 
 const NavigationBar = () => (
   <Navbar bg="light" expand="lg" style={{ height: '100px' }}>
-    <Navbar.Brand as={Link} to="/" style={{ marginLeft: '2rem' }}>
-      <StyledLink to="/" fontSize={28}>
+    <Navbar.Brand as={Link} to="/" style={{ marginLeft: '2rem', fontSize: '28px' }}>
         My Blog
-      </StyledLink>
     </Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
