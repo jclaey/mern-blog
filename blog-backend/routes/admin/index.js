@@ -11,7 +11,8 @@ import {
 import {
     login,
     refreshAccessToken,
-    logout
+    logout,
+    getDashboardAdmin
 } from '../../controllers/admin/index.js'
 
 router.route('/login').post([
@@ -20,5 +21,6 @@ router.route('/login').post([
 ], asyncHandler(login))
 router.route('/refresh').post(refreshAccessToken)
 router.route('/logout').post(logout)
+router.route('/dashboard-admin').get(authAdmin, asyncHandler(getDashboardAdmin))
 
 export default router
