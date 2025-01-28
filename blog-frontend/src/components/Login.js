@@ -36,10 +36,10 @@ const Login = () => {
 
     return (
         <Layout>
-            <div style={{ marginBottom: '2rem' }}>
-                <h2>Sign In</h2>
+            <div style={{ marginBottom: '4rem' }}>
+                <h1>Sign In</h1>
             </div>
-            <div className='login-form'>
+            <div className='login-form' style={{ marginBottom: '4rem' }}>
                 <Form 
                     style={{ marginBottom: '3rem', width: '50%' }}
                     onSubmit={handleLogin}
