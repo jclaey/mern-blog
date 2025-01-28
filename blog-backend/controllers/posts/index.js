@@ -7,7 +7,7 @@ export const postNew = async (req, res, next) => {
         const { title, content } = req.body
 
         if (!title || !content) {
-            res.status(400);
+            res.status(400)
             throw new Error('Please provide all required fields')
         }
 
@@ -46,6 +46,7 @@ export const postsGet = async (req, res, next) => {
             .sort({ '_id': -1 })
             .skip(skip)
             .limit(limit)
+            .exec()
 
         const totalPosts = await Post.countDocuments()
 

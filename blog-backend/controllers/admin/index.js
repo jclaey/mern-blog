@@ -38,6 +38,20 @@ export const login = async (req, res, next) => {
     }
 }
 
+export const getDashboardAdmin = async (req, res, next) => {
+    try {
+        const admin = await Admin.findById(req.adminId).select('-password')
+
+        if (!admin) {
+            return res.status(404).json({ message: 'Admin not found' })
+        }
+
+        res.status(200).json(admin)
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const refreshAccessToken = async (req, res, next) => {
     try {
         const { refreshToken } = req.body
