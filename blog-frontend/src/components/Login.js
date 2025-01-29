@@ -10,7 +10,7 @@ const Login = () => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const handleLogin = async () => {
+    const handleLogin = async e => {
         e.preventDefault()
         setError('')
         setLoading(true)
@@ -21,11 +21,13 @@ const Login = () => {
                 password,
             })
 
-            const { token } = response.data
+            const { accessToken } = response.data
 
-            localStorage.setItem('accessToken', token)
+            console.log(accessToken)
 
-            window.location.href = '/admin'
+            localStorage.setItem('accessToken', accessToken)
+
+            window.location.href = '/admin/dashboard'
         } catch (err) {
             console.error('Login failed:', err.response?.data || err.message)
             setError('Invalid email or password. Please try again.')
