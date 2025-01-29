@@ -2,12 +2,14 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './components/Home.js'
 import Login from './components/Login.js'
+import Dashboard from './components/Dashboard.js'
 
 const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/admin/login" element={<Login />} />
+      <Route path="/admin/dashboard" element={<Dashboard />} />
     </Routes>
   </Router>
 )
