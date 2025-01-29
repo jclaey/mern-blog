@@ -1,0 +1,7 @@
+.dashboard-container {
+    min-height: 400px;
+}
+
+.dashboard-container div:first-of-type {
+    margin-bottom: 2rem;
+}

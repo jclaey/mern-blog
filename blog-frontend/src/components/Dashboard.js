@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
+import axios from 'axios'
 import Layout from "./Layout.js"
+import '../styles/dashboard.css'
 
 const Dashboard = () => {
     const [adminDetails, setAdminDetails] = useState(null)
@@ -8,7 +10,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchAdminDetails = async () => {
             try {
-                const token = localStorage.getItem('token')
+                const token = localStorage.getItem('accessToken')
                 const response = await axios.get('http://localhost:5000/api/admin/dashboard-admin', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -31,15 +33,19 @@ const Dashboard = () => {
 
     return (
         <Layout>
-            <h1>Admin Dashboard</h1>
-            {adminDetails ? (
+            <div className="dashboard-container">
                 <div>
-                    { adminDetails.name ? <p>Name: {adminDetails.name}</p> : '' }
-                    <p>Email: {adminDetails.email}</p>
+                    <h1>Admin Dashboard</h1>
                 </div>
-            ) : (
-                <p>Loading admin details...</p>
-            )}
+                {adminDetails ? (
+                    <div>
+                        { adminDetails.name ? <h3>Hello, {adminDetails.name}</h3> : '' }
+                        <p style={{ fontSize: '20px' }}>Email: {adminDetails.email}</p>
+                    </div>
+                ) : (
+                    <p>Loading admin details...</p>
+                )}
+            </div>
         </Layout>
     )
 }
