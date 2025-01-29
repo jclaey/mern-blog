@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Dashboard from './components/Dashboard.js'
+import NewPost from './components/NewPost.js'
 
 const App = () => (
   <Router>
@@ -10,6 +11,7 @@ const App = () => (
       <Route path="/" element={<Home />} />
       <Route path="/admin/login" element={<Login />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
+      <Route path="/admin/new-post" element={<NewPost />} />
     </Routes>
   </Router>
 )
