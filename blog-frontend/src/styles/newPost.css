@@ -1,4 +1,14 @@
-.new-post-form {
+body {
+    width: 100vw;
+}
+
+.new-post-form-container {
     display: flex;
     justify-content: center;
+    width: 100%;
+}
+
+.new-post-form {
+    width: 80%;
+    margin: 0 auto;
 }
