@@ -4,6 +4,7 @@ import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Dashboard from './components/Dashboard.js'
 import NewPost from './components/NewPost.js'
+import Post from './components/Post.js'
 
 const App = () => (
   <Router>
@@ -12,6 +13,7 @@ const App = () => (
       <Route path="/admin/login" element={<Login />} />
       <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/admin/post/new" element={<NewPost />} />
+      <Route path="/post/:id" element={<Post />} />
     </Routes>
   </Router>
 )
