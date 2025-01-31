@@ -1,10 +1,14 @@
-import { useState } from 'react'
-import Layout from "./Layout.js"
-import { Form, Button, Alert } from "react-bootstrap"
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Form, Button, Alert } from 'react-bootstrap'
 import axios from 'axios'
+import Layout from './Layout.js'
+import AuthContext from '../context/AuthContext.js'
 import '../styles/login.css'
 
 const Login = () => {
+    const { setAccessToken } = useContext(AuthContext)
+    const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -19,15 +23,11 @@ const Login = () => {
             const response = await axios.post("http://localhost:5000/api/admin/login", {
                 email,
                 password,
-            })
+            }, { withCredentials: true })
 
-            const { accessToken } = response.data
+            setAccessToken(response.data.accessToken)
 
-            console.log(accessToken)
-
-            localStorage.setItem('accessToken', accessToken)
-
-            window.location.href = '/admin/dashboard'
+            navigate('/admin/dashboard')
         } catch (err) {
             console.error('Login failed:', err.response?.data || err.message)
             setError('Invalid email or password. Please try again.')
@@ -69,7 +69,7 @@ const Login = () => {
                         type="submit" 
                         variant="primary"
                         disabled={loading}
-                        id='form-btn'
+                        id="form-btn"
                     >
                         {loading ? "Logging in..." : "Login"}
                     </Button>
