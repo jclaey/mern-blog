@@ -11,7 +11,7 @@ export const login = async (req, res, next) => {
             const accessToken = jwt.sign(
                 { adminId: admin._id },
                 process.env.JWT_SECRET, 
-                { expiresIn: '1h' }
+                { expiresIn: '15m' }
             )
 
             const refreshToken = jwt.sign(
@@ -20,13 +20,18 @@ export const login = async (req, res, next) => {
                 { expiresIn: '7d' }
             )
 
-            admin.refreshToken = refreshToken
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            })
+
             await admin.save()
 
             res.status(200).json({
                 message: 'Login successful',
                 accessToken,
-                refreshToken,
                 adminId: admin._id
             })
         } else {
@@ -54,11 +59,10 @@ export const getDashboardAdmin = async (req, res, next) => {
 
 export const refreshAccessToken = async (req, res, next) => {
     try {
-        const { refreshToken } = req.body
+        const refreshToken = req.cookies.refreshToken
 
         if (!refreshToken) {
-            res.status(401);
-            throw new Error('Refresh token is required')
+            return res.status(401).json({ message: 'Unauthorized' })
         }
 
         const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET)
@@ -66,21 +70,24 @@ export const refreshAccessToken = async (req, res, next) => {
         const admin = await Admin.findById(decoded.adminId)
 
         if (!admin || admin.refreshToken !== refreshToken) {
-            res.status(403)
-            throw new Error('Invalid refresh token')
+            if (admin) {
+                admin.refreshToken = null
+                await admin.save()
+            }
+            return res.status(403).json({ message: 'Invalid refresh token' })
         }
 
         const newAccessToken = jwt.sign(
             { adminId: admin._id },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '15m' }
         )
 
         res.status(200).json({
             accessToken: newAccessToken,
         })
     } catch (err) {
-        res.status(403).json({ message: 'Invalid or expired refresh token' })
+        next(err)
     }
 }
 

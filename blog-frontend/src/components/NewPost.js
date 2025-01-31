@@ -31,6 +31,7 @@ const NewPost = () => {
             console.log("Post created:", response.data)
             setTitle("")
             setContent("")
+            window.location.href = '/'
         } catch (err) {
             console.error("Error creating post:", err)
             setError("Failed to create post.")
