@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Button, Alert } from 'react-bootstrap'
-import axios from 'axios'
+import api from '../api.js'
 import Layout from './Layout.js'
 import AuthContext from '../context/AuthContext.js'
+import { setAccessToken } from '../utils/authHelpers.js'
 import '../styles/login.css'
 
 const Login = () => {
-    const { setAccessToken } = useContext(AuthContext)
+    const { setAccessToken: updateContextToken } = useContext(AuthContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -20,12 +21,13 @@ const Login = () => {
         setLoading(true)
 
         try {
-            const response = await axios.post("http://localhost:5000/api/admin/login", {
+            const response = await api.post("http://localhost:5000/api/admin/login", {
                 email,
                 password,
             }, { withCredentials: true })
 
             setAccessToken(response.data.accessToken)
+            updateContextToken(response.data.accessToken)
 
             navigate('/admin/dashboard')
         } catch (err) {
