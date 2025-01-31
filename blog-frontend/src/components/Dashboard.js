@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
+import api from '../api.js'
 import Layout from "./Layout.js"
 import '../styles/dashboard.css'
 
@@ -11,7 +11,7 @@ const Dashboard = () => {
         const fetchAdminDetails = async () => {
             try {
                 const token = localStorage.getItem('accessToken')
-                const response = await axios.get('http://localhost:5000/api/admin/dashboard-admin', {
+                const response = await api.get('http://localhost:5000/api/admin/dashboard-admin', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

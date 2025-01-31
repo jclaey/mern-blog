@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from "react-router-dom"
+import { decode } from 'html-entities'
 import Layout from './Layout.js'
-import { Card, Spinner } from "react-bootstrap"
+import { Spinner, Image } from "react-bootstrap"
 
 const Post = () => {
-    const { postId } = useParams()
+    const { id } = useParams()
     const [post, setPost] = useState(null)
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -13,7 +14,7 @@ const Post = () => {
     useEffect(() => {
         const fetchPost = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/posts/post/${postId}`)
+                const response = await axios.get(`http://localhost:5000/api/posts/post/${id}`)
                 setPost(response.data.post)
             } catch (err) {
                 console.error("Error fetching post:", err)
@@ -24,7 +25,7 @@ const Post = () => {
         }
 
         fetchPost()
-    }, [postId])
+    }, [id])
 
     if (loading) {
         return (
@@ -42,14 +43,13 @@ const Post = () => {
 
     return (
         <Layout>
-            <Card>
-                {post.image ? <Card.Img variant="top" src={post.image.path} /> : ""}
-                <Card.Body>
-                    <Card.Title>{post.title}</Card.Title>
-                    <Card.Text dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
-                    {post.author ? <Card.Text>By: {post.author.name}</Card.Text> : ""}
-                </Card.Body>
-            </Card>
+            <div>
+                {post.image ? <Image src={`${post.image.path}`} rounded /> : ""}
+            </div>
+            <div>
+                <h1>{post.title}</h1>
+            </div>
+            <div dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
         </Layout>
     )
 }
