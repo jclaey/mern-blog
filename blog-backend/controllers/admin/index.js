@@ -93,17 +93,12 @@ export const refreshAccessToken = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try {
-        const { adminId } = req.body
-
-        const admin = await Admin.findById(adminId)
-
-        if (admin) {
-            admin.refreshToken = null
-            await admin.save()
-            res.status(200).json({ message: 'Logged out successfully' })
-        } else {
-            res.status(400).json({ message: 'Admin not found' })
-        }
+        res.clearCookie("refreshToken", { 
+            httpOnly: true, 
+            sameSite: "Strict", 
+            secure: process.env.NODE_ENV === 'production'
+        })
+        res.status(200).json({ message: "Logout successful" })
     } catch (err) {
         next(err)
     }
