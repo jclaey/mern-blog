@@ -1,38 +1,42 @@
 import { useEffect, useRef } from "react"
 
 const Editor = ({ value, onChange }) => {
-    const editorRef = useRef(null)
+  const editorRef = useRef(null)
+  const initialized = useRef(false)
 
-    useEffect(() => {
-        if (window.tinymce) {
-          window.tinymce.init({
-            selector: "#editor",
-            height: 400,
-            width: "100%",
-            menubar: false,
-            resize: "both",
-            plugins: "advlist lists link image charmap preview anchor code",
-            toolbar:
-              "undo redo | formatselect | blocks | hr | strikethrough underline bold italic | \
-              bullist numlist | removeformat",
-            setup: (editor) => {
-              editorRef.current = editor
-              editor.setContent(value || "")
-              editor.on("input change keyup", () => {
-                onChange(editor.getContent())
-              })
-            },
-          })
-        }
-    
-        return () => {
-          if (window.tinymce) {
-            window.tinymce.remove("#editor")
-          }
-        }
-    }, [value])
+  useEffect(() => {
+    if (!initialized.current) {
+      if (window.tinymce) {
+        window.tinymce.init({
+          selector: "#editor",
+          height: 400,
+          width: "100%",
+          menubar: false,
+          plugins: "advlist autolink lists link image charmap preview anchor",
+          toolbar:
+            "undo redo | formatselect | bold italic backcolor | " +
+            "alignleft aligncenter alignright alignjustify | " +
+            "bullist numlist outdent indent | removeformat",
+          setup: (editor) => {
+            editorRef.current = editor
+            editor.on("change", () => {
+              onChange(editor.getContent())
+            })
+          },
+        })
 
-    return <textarea id="editor" defaultValue={value}></textarea>
+        initialized.current = true
+      }
+    }
+
+    return () => {
+      if (window.tinymce) {
+        window.tinymce.remove("#editor")
+      }
+    }
+  }, [])
+
+  return <textarea id="editor" defaultValue={value}></textarea>
 }
 
 export default Editor
