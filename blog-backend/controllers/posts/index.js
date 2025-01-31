@@ -11,12 +11,20 @@ export const postNew = async (req, res, next) => {
             throw new Error('Please provide all required fields')
         }
 
-        let image = req.file || {}
+        let image = {}
+
+        if (req.file) {
+            image = {
+                url: req.file.path,
+                public_id: req.file.filename
+            }
+        }
 
         const post = await Post.create({
             title,
             content,
-            image
+            image,
+            author: req.adminId
         })
 
         res.status(201).json({
