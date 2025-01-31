@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import axios from 'axios'
+import { decode } from 'html-entities'
 import Layout from './Layout.js'
 
 const Home = () => {
@@ -31,7 +32,7 @@ const Home = () => {
             }
             <Card.Body>
                 <Card.Title>{post.title}</Card.Title>
-                <Card.Text>{post.content.slice(0, 30)}</Card.Text>
+                <Card.Text dangerouslySetInnerHTML={{ __html: decode(post.content).slice(0, 30) }} />
                 { post.author 
                    ? <Card.Text>By: {post.author.name}</Card.Text>
                    : ''
