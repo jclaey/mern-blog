@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import { Button, Card } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { decode } from 'html-entities'
 import Layout from './Layout.js'
@@ -37,7 +38,9 @@ const Home = () => {
                    ? <Card.Text>By: {post.author.name}</Card.Text>
                    : ''
                 }
-                <Button href={`http://localhost:5000/api/posts/post/${post._id}`} variant="primary">View Post</Button>
+                <Link to={`/post/${post._id}`}>
+                    <Button variant="primary">View Post</Button>
+                </Link>
             </Card.Body>
         </Card>
     ))
