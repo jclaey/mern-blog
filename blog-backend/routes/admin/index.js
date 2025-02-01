@@ -19,8 +19,8 @@ router.route('/login').post([
     validateEmail,
     validatePassword
 ], asyncHandler(login))
-router.route('/refresh').post(refreshAccessToken)
 router.route('/logout').post(logout)
+router.route('/refresh').post(refreshAccessToken)
 router.route('/dashboard-admin').get(authAdmin, asyncHandler(getDashboardAdmin))
 
 export default router

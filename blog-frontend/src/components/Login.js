@@ -8,30 +8,36 @@ import { setAccessToken } from '../utils/authHelpers.js'
 import '../styles/login.css'
 
 const Login = () => {
-    const { setAccessToken: updateContextToken } = useContext(AuthContext)
+    const { setAccessToken: updateContextToken, setIsSignedIn } = useContext(AuthContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const handleLogin = async e => {
+    const handleLogin = async (e) => {
         e.preventDefault()
         setError('')
         setLoading(true)
 
         try {
-            const response = await api.post("http://localhost:5000/api/admin/login", {
+            const response = await api.post("/admin/login", {
                 email,
                 password,
             }, { withCredentials: true })
 
+            console.log("✅ Login Successful, Access Token:", response.data.accessToken)
+
             setAccessToken(response.data.accessToken)
             updateContextToken(response.data.accessToken)
+            setIsSignedIn(true)
 
-            navigate('/admin/dashboard')
+            setTimeout(() => {
+                navigate('/admin/dashboard')
+            }, 100)
+
         } catch (err) {
-            console.error('Login failed:', err.response?.data || err.message)
+            console.error('❌ Login failed:', err.response?.data || err.message)
             setError('Invalid email or password. Please try again.')
         } finally {
             setLoading(false)
