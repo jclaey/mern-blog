@@ -10,8 +10,8 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchAdminDetails = async () => {
             try {
-                const token = localStorage.getItem('accessToken')
-                const response = await api.get('http://localhost:5000/api/admin/dashboard-admin', {
+                const token = sessionStorage.getItem('accessToken')
+                const response = await api.get('/admin/dashboard-admin', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
