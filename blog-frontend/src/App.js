@@ -5,6 +5,7 @@ import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Dashboard from './components/Dashboard.js'
 import NewPost from './components/NewPost.js'
+import EditPost from './components/EditPost.js'
 import Post from './components/Post.js'
 
 const App = () => (
@@ -16,6 +17,7 @@ const App = () => (
       <Route element={<ProtectedRoute />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/post/new" element={<NewPost />} />
+        <Route path="/admin/edit/:id" element={<EditPost />} />
       </Route>
     </Routes>
   </Router>

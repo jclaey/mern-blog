@@ -1,5 +1,6 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import webpack from 'webpack'
 
 export default {
   entry: './src/index.js',
@@ -31,6 +32,9 @@ export default {
       template: './index.html',
       favicon: './favicon.ico'
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    })
   ],
   resolve: {
     extensions: ['.js', '.jsx'],
