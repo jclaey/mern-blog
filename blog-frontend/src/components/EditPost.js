@@ -59,33 +59,35 @@ const EditPost = () => {
 
     return (
         <Layout>
-            <div style={{ marginBottom: "4rem" }}>
-                <h1>Edit Post</h1>
-            </div>
-            <div className="edit-post-form-container" style={{ marginBottom: "4rem" }}>
-                <Form onSubmit={handleSubmit} className="edit-post-form">
-                    {error && <div className="alert alert-danger">{error}</div>}
-                    
-                    <Form.Group className="mb-3">
-                        <Form.Label>Post Title</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Enter post title..."
-                            required
-                        />
-                    </Form.Group>
+            <div className="main">
+                <div style={{ marginBottom: "4rem" }}>
+                    <h1>Edit Post</h1>
+                </div>
+                <div className="edit-post-form-container" style={{ marginBottom: "4rem" }}>
+                    <Form onSubmit={handleSubmit} className="edit-post-form">
+                        {error && <div className="alert alert-danger">{error}</div>}
+                        
+                        <Form.Group className="mb-3">
+                            <Form.Label>Post Title</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="Enter post title..."
+                                required
+                            />
+                        </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <Form.Label>Post Content</Form.Label>
-                        <Editor key={id} value={content} onChange={setContent} />
-                    </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Post Content</Form.Label>
+                            <Editor key={id} value={content} onChange={setContent} />
+                        </Form.Group>
 
-                    <Button type="submit" variant="primary" id="form-btn">
-                        {loading ? "Updating..." : "Update Post"}
-                    </Button>
-                </Form>
+                        <Button type="submit" variant="primary" id="form-btn">
+                            {loading ? "Updating..." : "Update Post"}
+                        </Button>
+                    </Form>
+                </div>
             </div>
         </Layout>
     )

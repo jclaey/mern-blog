@@ -27,6 +27,20 @@ const Home = () => {
         fetchPosts()
     }, [])
 
+    const handleDelete = async (postId) => {
+        if (!window.confirm("Are you sure you want to delete this post?")) return;
+        try {
+            const token = localStorage.getItem("accessToken")
+            await axios.delete(`http://localhost:5000/api/posts/post/${postId}/delete`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            setPosts(prevPosts => prevPosts.filter(post => post._id !== postId))
+        } catch (error) {
+            console.error("Error deleting post:", error)
+            alert("Failed to delete post.")
+        }
+    }
+
     const renderedPosts = posts.map(post => (
         <Card key={post._id} className="card mb-3">
             {post.image 
@@ -48,9 +62,13 @@ const Home = () => {
                         <Link to={`/admin/edit/${post._id}`}>
                             <Button variant="warning" className="ms-2">Edit</Button>
                         </Link>
-                        <Link to={`/admin/edit/${post._id}`}>
-                            <Button variant="danger" className="ms-2">Delete</Button>
-                        </Link>
+                        <Button 
+                            variant="danger" 
+                            className="ms-2"
+                            onClick={() => handleDelete(post._id)}
+                        >
+                            Delete
+                        </Button>
                     </>
                 )}
             </Card.Body>
@@ -59,10 +77,12 @@ const Home = () => {
 
     return (
         <Layout>
-            <h1 className="mb-5">Welcome to My Blog!</h1>
-            {error && <div className="alert alert-danger">{error}</div>}
-            <div style={{ marginBottom: '5rem' }}>
-                {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
+            <div className="main">
+                <h1 className="mb-5">Welcome to My Blog!</h1>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <div style={{ marginBottom: '5rem' }}>
+                    {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
+                </div>
             </div>
         </Layout>
     )
