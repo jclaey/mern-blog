@@ -17,6 +17,7 @@ const Editor = ({ value, onChange }) => {
             "undo redo | formatselect | bold italic backcolor | " +
             "alignleft aligncenter alignright alignjustify | " +
             "bullist numlist outdent indent | removeformat",
+            content_css: "https://cdn.tiny.cloud/1/gpcfinmpmsaqqlj61u93b2k1jce8onblj0nybpb9ti64jvmu/tinymce/6/tinymce.min.js",
           setup: (editor) => {
             editorRef.current = editor
             editor.on("change", () => {

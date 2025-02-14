@@ -14,7 +14,6 @@ const NavigationBar = () => {
     }
 
     const { accessToken, isSignedIn, setAccessToken, setIsSignedIn } = auth
-    const navigate = useNavigate()
 
     const handleLogout = async () => {
         try {
@@ -46,13 +45,13 @@ const NavigationBar = () => {
                     <StyledLink to="/" fontSize={20}>Home</StyledLink>
                     <StyledLink to="/about" fontSize={20}>About</StyledLink>
                 </Nav>
-                <div>
+                <div style={{ marginRight: '5rem' }}>
                     {isSignedIn ? (
                         <Button variant="danger" onClick={handleLogout}>
                             Logout
                         </Button>
                     ) : (
-                        <Nav.Link as={Link} to="/admin/login">Login</Nav.Link>
+                        <StyledLink to="/admin/login" fontSize={20}>Login</StyledLink>
                     )}
                 </div>
             </Navbar.Collapse>

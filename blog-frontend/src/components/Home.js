@@ -1,15 +1,17 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { decode } from 'html-entities'
 import Layout from './Layout.js'
+import AuthContext from '../context/AuthContext.js'
 
 const Home = () => {
     const [posts, setPosts] = useState([])
     const [error, setError] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
+    const { isSignedIn } = useContext(AuthContext)
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -41,6 +43,16 @@ const Home = () => {
                 <Link to={`/post/${post._id}`}>
                     <Button variant="primary">View Post</Button>
                 </Link>
+                {isSignedIn && (
+                    <>
+                        <Link to={`/admin/edit/${post._id}`}>
+                            <Button variant="warning" className="ms-2">Edit</Button>
+                        </Link>
+                        <Link to={`/admin/edit/${post._id}`}>
+                            <Button variant="danger" className="ms-2">Delete</Button>
+                        </Link>
+                    </>
+                )}
             </Card.Body>
         </Card>
     ))

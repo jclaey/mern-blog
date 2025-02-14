@@ -8,12 +8,16 @@ export const AuthProvider = ({ children }) => {
     const [isSignedIn, setIsSignedIn] = useState(!!accessToken)
 
     useEffect(() => {
+        console.log("🔹 Webpack Injected NODE_ENV:", process.env.NODE_ENV)
         console.log("🔹 Checking authentication on page load...")
 
-        if (!document.cookie.includes("refreshToken")) {
-            if (import.meta.env.DEV) {
-                console.warn("❌ No refresh token found in cookies. Logging out user...")
-            }
+        if (accessToken) {
+            console.log("✅ Access token already exists, skipping refresh check.")
+            return
+        }
+
+        if (process.env.NODE_ENV !== 'production' && !document.cookie.includes("refreshToken")) {
+            console.warn("❌ No refresh token found in cookies. Logging out user...")
             setAccessToken(null)
             setIsSignedIn(false)
             sessionStorage.removeItem("accessToken")
