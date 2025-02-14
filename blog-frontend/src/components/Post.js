@@ -43,13 +43,15 @@ const Post = () => {
 
     return (
         <Layout>
-            <div>
-                {post.image ? <Image src={`${post.image.path}`} rounded /> : ""}
+            <div className="main">
+                <div>
+                    {post.image ? <Image src={`${post.image.path}`} rounded /> : ""}
+                </div>
+                <div>
+                    <h1>{post.title}</h1>
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
             </div>
-            <div>
-                <h1>{post.title}</h1>
-            </div>
-            <div dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
         </Layout>
     )
 }
