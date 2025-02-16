@@ -47,9 +47,18 @@ const NavigationBar = () => {
                 </Nav>
                 <div style={{ marginRight: '5rem' }}>
                     {isSignedIn ? (
-                        <Button variant="danger" onClick={handleLogout}>
-                            Logout
-                        </Button>
+                        <div>
+                            <Link to="/admin/post/new" style={{ marginRight: '1rem' }}>
+                                <Button variant="success">
+                                    <i className="fa-solid fa-plus" style={{  marginRight: '0.5rem' }}></i>
+                                    Add New Post
+                                </Button>
+                            </Link>
+                            <Button variant="danger" onClick={handleLogout}>
+                                <i className="fa-solid fa-right-from-bracket" style={{ marginRight: '0.5rem' }}></i>
+                                Logout
+                            </Button>
+                        </div>
                     ) : (
                         <StyledLink to="/admin/login" fontSize={20}>Login</StyledLink>
                     )}
