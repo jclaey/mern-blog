@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { decode } from 'html-entities'
 import Layout from './Layout.js'
 import { Spinner, Image } from "react-bootstrap"
+import "../styles/post.css"
 
 const Post = () => {
     const { id } = useParams()
@@ -50,7 +51,7 @@ const Post = () => {
                 <div>
                     <h1>{post.title}</h1>
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
+                <div className='post-text' dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
             </div>
         </Layout>
     )

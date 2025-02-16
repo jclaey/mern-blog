@@ -55,18 +55,25 @@ const Home = () => {
                    : ''
                 }
                 <Link to={`/post/${post._id}`}>
-                    <Button variant="primary">View Post</Button>
+                    <Button variant="primary">
+                        <i className="fa-solid fa-book-open-reader" style={{ marginRight: '0.5rem' }}></i>
+                        View Post
+                    </Button>
                 </Link>
                 {isSignedIn && (
                     <>
                         <Link to={`/admin/edit/${post._id}`}>
-                            <Button variant="warning" className="ms-2">Edit</Button>
+                            <Button variant="warning" className="ms-2">
+                                <i className="fa-solid fa-pen-to-square" style={{ marginRight: '0.5rem' }}></i>
+                                Edit
+                            </Button>
                         </Link>
                         <Button 
                             variant="danger" 
                             className="ms-2"
                             onClick={() => handleDelete(post._id)}
                         >
+                            <i className="fa-solid fa-trash" style={{ marginRight: '0.5rem' }}></i>
                             Delete
                         </Button>
                     </>
