@@ -16,8 +16,9 @@ const Home = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/posts')
+                const response = await axios.get(`http://localhost:5000/api/posts?page=${currentPage}&limit=5`)
                 setPosts(response.data.posts)
+                setTotalPages(response.data.totalPages)
             } catch (err) {
                 console.error('Error fetching posts:', err)
                 setError("Failed to fetch posts. Please try again later.")
@@ -25,7 +26,13 @@ const Home = () => {
         }
 
         fetchPosts()
-    }, [])
+    }, [currentPage])
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage)
+        }
+    }
 
     const handleDelete = async (postId) => {
         if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -82,6 +89,30 @@ const Home = () => {
         </Card>
     ))
 
+    const renderPagination = () => (
+        <div className="pagination d-flex justify-content-center my-4">
+            <Button 
+                variant="secondary" 
+                disabled={currentPage === 1} 
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="me-2"
+            >
+                Previous
+            </Button>
+            <span className="align-self-center mx-2">
+                Page {currentPage} of {totalPages}
+            </span>
+            <Button 
+                variant="secondary" 
+                disabled={currentPage === totalPages} 
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="ms-2"
+            >
+                Next
+            </Button>
+        </div>
+    )
+
     return (
         <Layout>
             <div className="main">
@@ -90,6 +121,7 @@ const Home = () => {
                 <div style={{ marginBottom: '5rem' }}>
                     {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
                 </div>
+                { totalPages > 1 && renderPagination }
             </div>
         </Layout>
     )
