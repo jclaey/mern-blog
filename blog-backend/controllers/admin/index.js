@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 import Admin from "../../models/Admin.js"
+import Post from '../../models/Post.js'
 
 export const login = async (req, res, next) => {
     try {
@@ -48,12 +50,20 @@ export const login = async (req, res, next) => {
 export const getDashboardAdmin = async (req, res, next) => {
     try {
         const admin = await Admin.findById(req.adminId).select('-password')
+        const posts = await Post.find({ 
+            // author: new mongoose.Types.ObjectId(admin._id) 
+        })
+        console.log(posts)
 
         if (!admin) {
             return res.status(404).json({ message: 'Admin not found' })
         }
 
-        res.status(200).json(admin)
+        if (!posts) {
+            return res.status(404).json({ message: 'Posts not found' })
+        }
+
+        res.status(200).json({ admin, posts })
     } catch (err) {
         next(err)
     }
