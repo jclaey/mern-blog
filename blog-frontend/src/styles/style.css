@@ -35,3 +35,22 @@ footer {
     width: 115px;
     font-size: 17px;
 }
+
+/* PAGINATION */
+
+.pagination button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
