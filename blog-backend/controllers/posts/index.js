@@ -49,14 +49,14 @@ export const postsGet = async (req, res, next) => {
         if (req.query.author) filter.author = req.query.author
         if (req.query.title) filter.title = new RegExp(req.query.title, 'i')
 
-        const posts = await Post.find({})
+        const totalPosts = await Post.countDocuments(filter)
+
+        const posts = await Post.find(filter)
             .populate({ path: 'author' })
             .sort({ '_id': -1 })
             .skip(skip)
             .limit(limit)
             .exec()
-
-        const totalPosts = await Post.countDocuments()
 
         res.status(200).json({
             totalPosts,
