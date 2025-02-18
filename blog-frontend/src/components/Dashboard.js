@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react"
-import { Button, Card } from 'react-bootstrap'
+import { Button, Card, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { decode } from 'html-entities'
 import api from '../api.js'
@@ -8,6 +8,7 @@ import '../styles/dashboard.css'
 import AuthContext from '../context/AuthContext.js'
 
 const Dashboard = () => {
+    const [searchQuery, setSearchQuery] = useState('')
     const [adminDetails, setAdminDetails] = useState(null)
     const [posts, setPosts] = useState([])
     const [error, setError] = useState(null)
@@ -27,7 +28,13 @@ const Dashboard = () => {
                 
                 setAdminDetails(response.data.admin)
 
-                const posts = await api.get(`http://localhost:5000/api/posts?page=${currentPage}&limit=5`)
+                const posts = await api.get(`http://localhost:5000/api/posts`, {
+                    params: {
+                        page: currentPage,
+                        limit: 5,
+                        title: searchQuery,
+                    },
+                })
 
                 setPosts(posts.data.posts)
                 setTotalPages(posts.data.totalPages)
@@ -38,7 +45,12 @@ const Dashboard = () => {
         }
 
         fetchAdminDetailsAndPosts()
-    }, [currentPage])
+    }, [currentPage, searchQuery])
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+        setCurrentPage(1)
+    }
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -143,8 +155,18 @@ const Dashboard = () => {
                 ) : (
                     <p>Loading admin details...</p>
                 )}
+                <Form onSubmit={handleSearch} className="mb-4 d-flex">
+                    <Form.Control
+                        type="text"
+                        placeholder="Search your posts..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="me-2"
+                    />
+                    <Button type="submit" variant="primary">Search</Button>
+                </Form>
                 <div style={{ marginBottom: '5rem' }}>
-                    {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
+                    {posts.length > 0 ? renderedPosts : <p>No posts found...</p>}
                 </div>
                 { totalPages > 1 && renderPagination() }
             </div>

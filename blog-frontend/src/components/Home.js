@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { Button, Card } from 'react-bootstrap'
+import { Button, Card, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { decode } from 'html-entities'
@@ -7,6 +7,7 @@ import Layout from './Layout.js'
 import AuthContext from '../context/AuthContext.js'
 
 const Home = () => {
+    const [searchQuery, setSearchQuery] = useState('')
     const [posts, setPosts] = useState([])
     const [error, setError] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
@@ -16,7 +17,13 @@ const Home = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/posts?page=${currentPage}&limit=5`)
+                const response = await axios.get(`http://localhost:5000/api/posts`, {
+                    params: {
+                        page: currentPage,
+                        limit: 5,
+                        title: searchQuery,
+                    },
+                })
                 setPosts(response.data.posts)
                 setTotalPages(response.data.totalPages)
             } catch (err) {
@@ -26,7 +33,12 @@ const Home = () => {
         }
 
         fetchPosts()
-    }, [currentPage])
+    }, [currentPage, searchQuery])
+
+    const handleSearch = (e) => {
+        e.preventDefault()
+        setCurrentPage(1)
+    }
 
     const handlePageChange = (newPage) => {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -117,6 +129,16 @@ const Home = () => {
         <Layout>
             <div className="main">
                 <h1 className="mb-5">Welcome to My Blog!</h1>
+                <Form onSubmit={handleSearch} className="mb-4 d-flex">
+                    <Form.Control
+                        type="text"
+                        placeholder="Search posts by title..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="me-2"
+                    />
+                    <Button type="submit" variant="primary">Search</Button>
+                </Form>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <div style={{ marginBottom: '5rem' }}>
                     {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
