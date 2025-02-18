@@ -48,6 +48,12 @@ const NavigationBar = () => {
                 <div style={{ marginRight: '5rem' }}>
                     {isSignedIn ? (
                         <div>
+                            <Link to="/admin/dashboard" style={{ marginRight: '1rem' }}>
+                                <Button variant="dark">
+                                    <i class="fa-solid fa-gauge" style={{  marginRight: '0.5rem' }}></i>
+                                    Dashboard
+                                </Button>
+                            </Link>
                             <Link to="/admin/post/new" style={{ marginRight: '1rem' }}>
                                 <Button variant="success">
                                     <i className="fa-solid fa-plus" style={{  marginRight: '0.5rem' }}></i>

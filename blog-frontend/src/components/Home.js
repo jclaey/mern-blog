@@ -90,9 +90,9 @@ const Home = () => {
     ))
 
     const renderPagination = () => (
-        <div className="pagination d-flex justify-content-center my-4">
+        <div className="pagination d-flex justify-content-center my-5">
             <Button 
-                variant="secondary" 
+                variant="outline-dark" 
                 disabled={currentPage === 1} 
                 onClick={() => handlePageChange(currentPage - 1)}
                 className="me-2"
@@ -103,7 +103,7 @@ const Home = () => {
                 Page {currentPage} of {totalPages}
             </span>
             <Button 
-                variant="secondary" 
+                variant="outline-dark" 
                 disabled={currentPage === totalPages} 
                 onClick={() => handlePageChange(currentPage + 1)}
                 className="ms-2"
@@ -121,7 +121,7 @@ const Home = () => {
                 <div style={{ marginBottom: '5rem' }}>
                     {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
                 </div>
-                { totalPages > 1 && renderPagination }
+                { totalPages > 1 && renderPagination() }
             </div>
         </Layout>
     )

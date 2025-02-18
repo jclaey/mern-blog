@@ -11,10 +11,12 @@ const Dashboard = () => {
     const [adminDetails, setAdminDetails] = useState(null)
     const [posts, setPosts] = useState([])
     const [error, setError] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [totalPages, setTotalPages] = useState(1)
     const { isSignedIn } = useContext(AuthContext)
 
     useEffect(() => {
-        const fetchAdminDetails = async () => {
+        const fetchAdminDetailsAndPosts = async () => {
             try {
                 const token = sessionStorage.getItem('accessToken')
                 const response = await api.get('/admin/dashboard-admin', {
@@ -24,15 +26,39 @@ const Dashboard = () => {
                 })
                 
                 setAdminDetails(response.data.admin)
-                setPosts(response.data.posts)
+
+                const posts = await api.get(`http://localhost:5000/api/posts?page=${currentPage}&limit=5`)
+
+                setPosts(posts.data.posts)
+                setTotalPages(posts.data.totalPages)
             } catch (err) {
                 console.error('Error fetching admin details:', err)
                 setError('Failed to fetch admin details')
             }
         }
 
-        fetchAdminDetails()
-    }, [])
+        fetchAdminDetailsAndPosts()
+    }, [currentPage])
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage)
+        }
+    }
+
+    const handleDelete = async (postId) => {
+        if (!window.confirm("Are you sure you want to delete this post?")) return
+        try {
+            const token = localStorage.getItem("accessToken")
+            await axios.delete(`http://localhost:5000/api/posts/post/${postId}/delete`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            setPosts(prevPosts => prevPosts.filter(post => post._id !== postId))
+        } catch (error) {
+            console.error("Error deleting post:", error)
+            alert("Failed to delete post.")
+        }
+    }
 
     const renderedPosts = posts.map(post => (
         <Card key={post._id} className="card mb-3">
@@ -75,6 +101,30 @@ const Dashboard = () => {
         </Card>
     ))
 
+    const renderPagination = () => (
+        <div className="pagination d-flex justify-content-center my-5">
+            <Button 
+                variant="outline-dark" 
+                disabled={currentPage === 1} 
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="me-2"
+            >
+                Previous
+            </Button>
+            <span className="align-self-center mx-2">
+                Page {currentPage} of {totalPages}
+            </span>
+            <Button 
+                variant="outline-dark" 
+                disabled={currentPage === totalPages} 
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="ms-2"
+            >
+                Next
+            </Button>
+        </div>
+    )
+
     if (error) {
         return <div className="alert alert-danger">{error}</div>
     }
@@ -96,6 +146,7 @@ const Dashboard = () => {
                 <div style={{ marginBottom: '5rem' }}>
                     {posts.length > 0 ? renderedPosts : <p>Loading posts...</p>}
                 </div>
+                { totalPages > 1 && renderPagination() }
             </div>
         </Layout>
     )
