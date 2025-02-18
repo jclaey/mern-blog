@@ -50,7 +50,7 @@ const NavigationBar = () => {
                         <div>
                             <Link to="/admin/dashboard" style={{ marginRight: '1rem' }}>
                                 <Button variant="dark">
-                                    <i class="fa-solid fa-gauge" style={{  marginRight: '0.5rem' }}></i>
+                                    <i className="fa-solid fa-gauge" style={{  marginRight: '0.5rem' }}></i>
                                     Dashboard
                                 </Button>
                             </Link>
