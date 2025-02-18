@@ -12,6 +12,16 @@ const Footer = () => {
                 </Col>
                 <Col>
                     <div>
+                        <StyledLink to="/about" fontSize={18}>
+                            About
+                        </StyledLink>
+                    </div>
+                    <div>
+                        <StyledLink to="/contact" fontSize={18}>
+                            Contact Us
+                        </StyledLink>
+                    </div>
+                    <div>
                         <StyledLink to="/privacy-policy" fontSize={18}>
                             Privacy Policy
                         </StyledLink>
