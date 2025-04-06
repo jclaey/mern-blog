@@ -13,11 +13,9 @@ export const postNew = async (req, res, next) => {
 
         let image = {}
 
-        if (req.file) {
-            image = {
-                url: req.file.path,
-                public_id: req.file.filename
-            }
+        image = {
+            path: req.file.path,
+            filename: req.file.filename
         }
 
         const post = await Post.create({
@@ -91,32 +89,33 @@ export const postGet = async (req, res, next) => {
 }
 
 export const postUpdate = async (req, res, next) => {
-    try {
-        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.status(400).json({ message: 'Invalid post ID' })
-        }
+  try {
+    const postId = req.params.id
+    const { title, content } = req.body
 
-        const post = await Post.findById(req.params.id)
+    const post = await Post.findById(postId)
+    if (!post) return res.status(404).json({ message: "Post not found" })
 
-        if (!post) {
-            res.status(404)
-            throw new Error('Post not found')
-        }
-        
-        if (req.body.title) post.title = req.body.title
-        if (req.body.content) post.content = req.body.content
+    if (req.file) {
+      if (post.image?.filename) {
+        await cloudinary.v2.uploader.destroy(post.image.filename)
+      }
 
-        if (req.file) {
-            if (req.file.path) post.image.path = req.file.path
-            if (req.file.filename) post.image.filename = req.file.filename
-        }
-        
-        await post.save()
-
-        res.status(200).json({ message: 'Post updated successfully', post })
-    } catch (err) {
-        next(err)
+      post.image = {
+        path: req.file.path,
+        filename: req.file.filename,
+      }
     }
+
+    post.title = title
+    post.content = content
+
+    await post.save()
+
+    res.status(200).json(post)
+  } catch (err) {
+    next(err)
+  }
 }
 
 export const postDelete = async (req, res, next) => {

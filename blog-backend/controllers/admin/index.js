@@ -51,9 +51,8 @@ export const getDashboardAdmin = async (req, res, next) => {
     try {
         const admin = await Admin.findById(req.adminId).select('-password')
         const posts = await Post.find({ 
-            // author: new mongoose.Types.ObjectId(admin._id) 
+            author: new mongoose.Types.ObjectId(admin._id)
         })
-        console.log(posts)
 
         if (!admin) {
             return res.status(404).json({ message: 'Admin not found' })
@@ -71,29 +70,29 @@ export const getDashboardAdmin = async (req, res, next) => {
 
 export const refreshAccessToken = async (req, res, next) => {
     try {
-        console.log("🔹 Incoming refresh request...");
-        console.log("🔹 Cookies received:", req.cookies); // ✅ Log received cookies
+        console.log("🔹 Incoming refresh request...")
+        console.log("🔹 Cookies received:", req.cookies)
 
-        const refreshToken = req.cookies?.refreshToken;
+        const refreshToken = req.cookies?.refreshToken
         if (!refreshToken) {
-            console.warn("❌ No refresh token found in request cookies.");
-            return res.status(401).json({ message: "Unauthorized - No refresh token" });
+            console.warn("❌ No refresh token found in request cookies.")
+            return res.status(401).json({ message: "Unauthorized - No refresh token" })
         }
 
-        let decoded;
+        let decoded
         try {
-            decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+            decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET)
         } catch (error) {
-            console.error("❌ Expired or invalid refresh token:", error.message);
-            return res.status(401).json({ message: "Refresh token expired. Please log in again." });
+            console.error("❌ Expired or invalid refresh token:", error.message)
+            return res.status(401).json({ message: "Refresh token expired. Please log in again." })
         }
 
-        const admin = await Admin.findById(decoded.adminId);
+        const admin = await Admin.findById(decoded.adminId)
         if (!admin || admin.jwtRefreshToken !== refreshToken) {
-            console.error("❌ Refresh token mismatch in database.");
-            admin.jwtRefreshToken = null;
-            await admin.save();
-            return res.status(403).json({ message: "Invalid refresh token" });
+            console.error("❌ Refresh token mismatch in database.")
+            admin.jwtRefreshToken = null
+            await admin.save()
+            return res.status(403).json({ message: "Invalid refresh token" })
         }
 
         // ✅ Generate a new Access Token
@@ -101,61 +100,59 @@ export const refreshAccessToken = async (req, res, next) => {
             { adminId: admin._id },
             process.env.JWT_SECRET,
             { expiresIn: "15m" }
-        );
+        )
 
-        res.status(200).json({ accessToken: newAccessToken });
+        res.status(200).json({ accessToken: newAccessToken })
 
     } catch (err) {
-        console.error("❌ Error refreshing token:", err.message);
-        next(err);
+        console.error("❌ Error refreshing token:", err.message)
+        next(err)
     }
-};
+}
 
 export const logout = async (req, res, next) => {
     try {
-        console.log("🔹 Received logout request...");
+        console.log("🔹 Received logout request...")
 
-        const refreshToken = req.cookies?.refreshToken;
+        const refreshToken = req.cookies?.refreshToken
         if (!refreshToken) {
-            console.warn("❌ No refresh token found in cookies before logout.");
-            return res.status(400).json({ message: "No refresh token found" });
+            console.warn("❌ No refresh token found in cookies before logout.")
+            return res.status(400).json({ message: "No refresh token found" })
         }
 
-        console.log("🔹 Refresh Token Found:", refreshToken);
+        console.log("🔹 Refresh Token Found:", refreshToken)
 
-        let decoded;
+        let decoded
         try {
-            decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+            decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET)
         } catch (error) {
-            console.error("❌ Invalid or expired refresh token during logout:", error.message);
-            return res.status(403).json({ message: "Invalid or expired refresh token" });
+            console.error("❌ Invalid or expired refresh token during logout:", error.message)
+            return res.status(403).json({ message: "Invalid or expired refresh token" })
         }
 
-        const admin = await Admin.findById(decoded.adminId);
+        const admin = await Admin.findById(decoded.adminId)
         if (!admin) {
-            console.warn("❌ No admin found for the provided refresh token.");
-            return res.status(403).json({ message: "Invalid refresh token" });
+            console.warn("❌ No admin found for the provided refresh token.")
+            return res.status(403).json({ message: "Invalid refresh token" })
         }
 
-        // ✅ Clear jwtRefreshToken from database
-        admin.jwtRefreshToken = null;
-        await admin.save();
-        console.log("✅ Refresh token removed from database");
+        admin.jwtRefreshToken = null
+        await admin.save()
+        console.log("✅ Refresh token removed from database")
 
-        // ✅ Try Different Cookie Expiration Methods
         res.cookie("refreshToken", "", {
             httpOnly: true,
             sameSite: "Lax",
-            secure: false, // ✅ Set to true in production
-            expires: new Date(0), // ✅ Forces immediate expiration
-            maxAge: -1, // ✅ Forces immediate removal
-        });
+            secure: false,
+            expires: new Date(0),
+            maxAge: -1,
+        })
 
-        console.log("✅ Logout successful");
-        return res.status(200).json({ message: "Logout successful" });
+        console.log("✅ Logout successful")
+        return res.status(200).json({ message: "Logout successful" })
 
     } catch (err) {
-        console.error("❌ Logout error:", err.message);
-        next(err);
+        console.error("❌ Logout error:", err.message)
+        next(err)
     }
-};
+}

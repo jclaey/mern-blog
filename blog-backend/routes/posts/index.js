@@ -33,7 +33,7 @@ router.route('/post/:id').get(asyncHandler(postGet))
 router.route('/post/:id/update').patch(upload.single('image'), [
     validatePostTitle,
     validatePostContent
-], asyncHandler(postUpdate))
+], handleValidationErrors, asyncHandler(postUpdate))
 router.route('/post/:id/delete').delete(asyncHandler(postDelete))
 
 export default router
