@@ -1,3 +1,10 @@
 .post-text {
     font-size: 20px;
 }
+
+.main .post-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

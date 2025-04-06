@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
                 setIsSignedIn(false)
                 sessionStorage.removeItem("accessToken")
             }
-        };
+        }
 
         checkAuth()
     }, [])
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         <AuthContext.Provider value={{ accessToken, isSignedIn, setAccessToken, setIsSignedIn }}>
             {children}
         </AuthContext.Provider>
-    );
-};
+    )
+}
 
 export default AuthContext

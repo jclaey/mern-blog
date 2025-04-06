@@ -5,7 +5,7 @@ import AuthContext from "../context/AuthContext.js"
 const ProtectedRoute = () => {
     const { isSignedIn } = useContext(AuthContext)
 
-    return isSignedIn ? <Outlet /> : <Navigate to="/admin/login" />
+    return isSignedIn ? <Outlet /> : <Navigate to="/admin/secure-access-portal" />
 }
 
 export default ProtectedRoute

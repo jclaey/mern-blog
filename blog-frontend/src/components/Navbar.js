@@ -66,7 +66,7 @@ const NavigationBar = () => {
                             </Button>
                         </div>
                     ) : (
-                        <StyledLink to="/admin/login" fontSize={20}>Login</StyledLink>
+                        <StyledLink to="/admin/secure-access-portal" fontSize={20}>Login</StyledLink>
                     )}
                 </div>
             </Navbar.Collapse>

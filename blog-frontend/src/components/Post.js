@@ -44,12 +44,17 @@ const Post = () => {
 
     return (
         <Layout>
-            <div className="main">
-                <div>
-                    {post.image ? <Image src={`${post.image.path}`} rounded /> : ""}
-                </div>
-                <div>
-                    <h1>{post.title}</h1>
+            <div className="main mb-5">
+                <div className="post-head mb-5">
+                    <div className="mb-5">
+                        {post.image ? <Image src={`${post.image.path}`} rounded /> : ""}
+                    </div>
+                    <div>
+                        <h1>{post.title}</h1>
+                    </div>
+                    <div>
+                        Posted on <strong>{new Date(post.createdAt).toLocaleDateString()}</strong>
+                    </div>
                 </div>
                 <div className='post-text' dangerouslySetInnerHTML={{ __html: decode(post.content) }} />
             </div>

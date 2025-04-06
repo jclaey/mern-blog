@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { Button, Card, Form } from 'react-bootstrap'
+import { Button, Card, Form, Row, Col } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { decode } from 'html-entities'
@@ -60,46 +60,50 @@ const Home = () => {
         }
     }
 
-    const renderedPosts = posts.map(post => (
-        <Card key={post._id} className="card mb-3">
-            {post.image 
-                ? <Card.Img variant='top' src={post.image.path} />
-                : ''
-            }
-            <Card.Body>
-                <Card.Title>{post.title}</Card.Title>
-                <Card.Text dangerouslySetInnerHTML={{ __html: decode(post.content).slice(0, 30) }} />
-                { post.author 
-                   ? <Card.Text>By: {post.author.name}</Card.Text>
-                   : ''
+    const renderedPosts = (
+        <Row>
+          {posts.map(post => (
+            <Col key={post._id} md={6} className="mb-4">
+              <Card className="h-100">
+                {post.image 
+                  ? <Card.Img variant="top" src={post.image.path} />
+                  : null
                 }
-                <Link to={`/post/${post._id}`}>
-                    <Button variant="primary">
-                        <i className="fa-solid fa-book-open-reader" style={{ marginRight: '0.5rem' }}></i>
-                        View Post
+                <Card.Body>
+                  <Card.Title>{post.title}</Card.Title>
+                  <Card.Text dangerouslySetInnerHTML={{ __html: decode(post.content).slice(0, 50) }} />
+                  {post.author && (
+                    <Card.Text>By: {post.author.name}</Card.Text>
+                  )}
+                  <Link to={`/post/${post._id}`}>
+                    <Button variant="primary" className="me-2">
+                      <i className="fa-solid fa-book-open-reader" style={{ marginRight: '0.5rem' }}></i>
+                      View Post
                     </Button>
-                </Link>
-                {isSignedIn && (
+                  </Link>
+                  {isSignedIn && (
                     <>
-                        <Link to={`/admin/edit/${post._id}`}>
-                            <Button variant="warning" className="ms-2">
-                                <i className="fa-solid fa-pen-to-square" style={{ marginRight: '0.5rem' }}></i>
-                                Edit
-                            </Button>
-                        </Link>
-                        <Button 
-                            variant="danger" 
-                            className="ms-2"
-                            onClick={() => handleDelete(post._id)}
-                        >
-                            <i className="fa-solid fa-trash" style={{ marginRight: '0.5rem' }}></i>
-                            Delete
+                      <Link to={`/admin/edit/${post._id}`}>
+                        <Button variant="warning" className="me-2">
+                          <i className="fa-solid fa-pen-to-square" style={{ marginRight: '0.5rem' }}></i>
+                          Edit
                         </Button>
+                      </Link>
+                      <Button 
+                        variant="danger"
+                        onClick={() => handleDelete(post._id)}
+                      >
+                        <i className="fa-solid fa-trash" style={{ marginRight: '0.5rem' }}></i>
+                        Delete
+                      </Button>
                     </>
-                )}
-            </Card.Body>
-        </Card>
-    ))
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )
 
     const renderPagination = () => (
         <div className="pagination d-flex justify-content-center my-5">

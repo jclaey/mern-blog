@@ -1,42 +1,44 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button, Form } from "react-bootstrap"
-import axios from 'axios'
+import api from "../api.js"
 import Layout from "./Layout.js"
 import Editor from "./Editor.js"
 import '../styles/newPost.css'
 
 const NewPost = () => {
     const [title, setTitle] = useState('')
+    const [image, setImage] = useState(null)
     const [content, setContent] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const handleSubmit = async e => {
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
-
-        setError(null);
-
+      
+        const formData = new FormData()
+        formData.append("title", title)
+        formData.append("content", content)
+        if (image) {
+          formData.append("image", image)
+        }
+      
         try {
-            setLoading(true)
-            const token = localStorage.getItem("accessToken")
-            const response = await axios.post(
-                "http://localhost:5000/api/posts/new",
-                { title, content },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+          const token = sessionStorage.getItem("accessToken")
+          const response = await api.post("/posts/new", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`
             }
-        )
-            console.log("Post created:", response.data)
-            setTitle("")
-            setContent("")
-            window.location.href = '/'
+          })
+      
+          console.log("✅ Post created:", response.data)
+          navigate(`/post/${response.data._id}`)
         } catch (err) {
-            console.error("Error creating post:", err)
-            setError("Failed to create post.")
-        } finally {
-            setLoading(false)
+          console.error("❌ Failed to create post:", err)
+          setError("Failed to create post. Try again.")
         }
     }
 
@@ -58,6 +60,26 @@ const NewPost = () => {
                                 required
                             />
                         </Form.Group>
+
+                        <Form.Group controlId="image" className="mb-3">
+                            <Form.Label>Featured Image</Form.Label>
+                            <Form.Control 
+                                type="file" 
+                                accept="image/*"
+                                onChange={(e) => setImage(e.target.files[0])}
+                            />
+                        </Form.Group>
+
+                        {image && (
+                            <div className="mb-3">
+                                <p>Preview:</p>
+                                <img 
+                                src={URL.createObjectURL(image)} 
+                                alt="Preview" 
+                                style={{ maxHeight: "200px" }} 
+                                />
+                            </div>
+                        )}
 
                         <Form.Group className="mb-3">
                             <Form.Label>Post Content</Form.Label>

@@ -21,7 +21,7 @@ const Login = () => {
         setLoading(true)
 
         try {
-            const response = await api.post("/admin/login", {
+            const response = await api.post("/admin/secure-access-portal", {
                 email,
                 password,
             }, { withCredentials: true })

@@ -13,7 +13,7 @@ const App = () => (
   <Router>
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/admin/login" element={<Login />} />
+      <Route path="/admin/secure-access-portal" element={<Login />} />
       <Route path="/post/:id" element={<Post />} />
       <Route path="/about" element={<About />} />
       <Route element={<ProtectedRoute />}>
