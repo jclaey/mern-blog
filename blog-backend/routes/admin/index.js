@@ -2,6 +2,17 @@ import express from 'express'
 const router = express.Router()
 import asyncHandler from '../../middleware/async.js'
 import { authAdmin } from '../../middleware/auth.js'
+import rateLimit from 'express-rate-limit'
+
+const loginLimiter = rateLimit({
+  windowMs: 12 * 60 * 60 * 1000, // 12 hours
+  max: 5, // limit to 5 requests per windowMs
+  message: {
+    message: "Too many login attempts from this IP. Please wait 12 hours and try again.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+})
 
 import {
     validateEmail,
@@ -15,7 +26,9 @@ import {
     getDashboardAdmin
 } from '../../controllers/admin/index.js'
 
-router.route('/login').post([
+router.route('/secure-access-portal').post(
+    loginLimiter, 
+[
     validateEmail,
     validatePassword
 ], asyncHandler(login))
